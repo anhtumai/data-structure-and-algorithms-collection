@@ -22,10 +22,16 @@ class Empty(BST):
     def remove(self, data) -> BST:
         return self
 
-    def _search(self, data: any, res: list[str]) -> list[str]:
+    def search(self, data: any) -> BST:
+        return self
+
+    def inorder(self) -> list[any]:
         return []
 
-    def search(self, data: any):
+    def preorder(self) -> list[any]:
+        return []
+
+    def postorder(self) -> list[any]:
         return []
 
     def __str__(self):
@@ -75,18 +81,22 @@ class Inode(BST):
             min_right = self.right.min_value_node()
             return Inode(min_right, self.left, self.right.remove(min_right))
 
-    def _search(self, data: any, res: list[str]) -> list[str]:
+    def search(self, data: any) -> BST:
         if (data > self.value):
-            res.append('R')
-            return self.right._search(data, res)
+            return self.right.search(data)
         elif (data < self.value):
-            res.append('L')
-            return self.left._search(data, res)
+            return self.left.search(data)
         else:
-            return res
+            return self
 
-    def search(self, data: any):
-        return self._search(data, [])
+    def inorder(self) -> list[any]:
+        return self.left.inorder() + [self.value] + self.right.inorder()
+
+    def preorder(self) -> list[any]:
+        return [self.value] + self.left.preorder() + self.right.preorder()
+
+    def postorder(self) -> list[any]:
+        return self.left.postorder() + self.right.postorder() + [self.value]
 
     def __str__(self):
         return "(" + str(self.left) + "<-" + str(self.value) + "->" + str(self.right) + ")"

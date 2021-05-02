@@ -20,9 +20,3 @@ def stable_quick_select(arr: list[any], k: int) -> any:
         return equal[0]
     else:
         return stable_quick_select(bigger, k - len(smaller) - len(equal))
-
-
-if __name__ == "__main__":
-    xs = [10, 9, 5, 2, 1, 5, 19, 3, 3, 3, 3, 3, 1, 4, 5, 2]
-    for i in range(1, len(xs) + 1):
-        print(stable_quick_select(xs, i))

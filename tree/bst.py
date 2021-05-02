@@ -28,18 +28,18 @@ class BST:
                 return self._recurs_insert(node.left, data)
         return
 
-    def search(self, data) -> list[str]:
-        return self._recurs_search(self.root, data, [])
+    def search(self, data: any) -> (TreeNode, TreeNode):
+        return self._recurs_search(self.root, data, Empty())
 
-    def _recurs_search(self, node: TreeNode, data: any, res: list[str]) -> list[str]:
+    def _recurs_search(self, node: TreeNode, data: any, parent: TreeNode) -> (TreeNode, TreeNode):
         if isinstance(node, Empty):
-            return []
+            return (Empty(), Empty())
         if (data > node.value):
-            return self._recurs_search(node.right, data, res + ["R"])
+            return self._recurs_search(node.right, data, node)
         elif (data < node.value):
-            return self._recurs_search(node.left, data, res + ["L"])
+            return self._recurs_search(node.left, data, node)
         else:
-            return res + ["E"]
+            return (node, parent)
 
     def _recurs_get_min_value(self, node: Inode):
         if isinstance(node.left, Empty):
@@ -51,15 +51,18 @@ class BST:
             return False
         return parent.right.value == node.value
 
-    def _reassign(self, parent, node, new_node):
-        # parent can be None, with node is self.root
-        if parent:
+    def _reassign(self, parent: TreeNode, node: Inode, new_node: TreeNode) -> None:
+        """
+        Mutate the value of a child node, given parent node, child node and its new value
+        Note: parent can be Empty, in the case that node in root
+        """
+        if (isinstance(parent, Empty)):
+            self.root = new_node
+        else:
             if self._is_right(node, parent):
                 parent.right = new_node
             else:
                 parent.left = new_node
-        else:
-            self.root = new_node
 
     def get_node_from_path(self, search_path: list[str]) -> Inode:
         # assume that length of search_path is bigger than 2
@@ -70,17 +73,10 @@ class BST:
             res = res.left if state == "L" else res.right
         return res
 
-
     def remove(self, data: any) -> bool:
-        search_path: list[str] = self.search(data)
-        if (len(search_path) == 0):
+        node, parent = self.search(data)
+        if (isinstance(node, Empty)):
             return False
-        if (len(search_path) == 1):
-            node: Inode = self.root
-            parent = None
-        else:
-            node: Inode = self.get_node_from_path(search_path)
-            parent: Inode = self.get_node_from_path(search_path[:-2] + [search_path[-1]])
         if (isinstance(node.left, Empty) and isinstance(node.right, Empty)):
             self._reassign(parent, node, Empty())
         elif (isinstance(node.left, Empty)):
@@ -92,6 +88,15 @@ class BST:
             if (self.remove(min_value)):
                 node.value = min_value
         return True
+
+    def get_inorder(self) -> list[any]:
+        return self.root.inorder()
+
+    def get_preorder(self) -> list[any]:
+        return self.root.preorder()
+
+    def get_postorder(self) -> list[any]:
+        return self.root.postorder()
 
     def __str__(self):
         return str(self.root)

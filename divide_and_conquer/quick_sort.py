@@ -1,3 +1,9 @@
+"""
+Stable quick sort: generate a new array, keep the order of original array
+In place quick sort: mutate the order of original array
+"""
+
+
 def stable_quick_sort(arr: list[any]) -> list[any]:
     if (len(arr) <= 1):
         return arr
@@ -17,9 +23,3 @@ def stable_quick_sort(arr: list[any]) -> list[any]:
 
 def in_place_quick_sort(arr: list) -> None:
     pass
-
-
-if __name__ == "__main__":
-    x = [8, 4, 19, 3, 10, 3, 5, 7, 7, 7, 7, 7, 7, 20]
-    sorted_x = pure_quick_sort(x)
-    print(sorted_x)

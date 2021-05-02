@@ -9,7 +9,6 @@ It is usefull since in real-life application, data constantly updates.
 
 Definition: a BST is a binary tree which values of left sub-tree <= root <= right sub-tree. There must be no dupplicated nodes.
 
-
 | Operation | (Sorted) List | BST         |
 | --------- | ------------- | ----------- |
 | Search    | O(log(n))     | O(log(n))   |

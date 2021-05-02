@@ -12,29 +12,22 @@ def generate_tree(elems: [int]) -> BST:
 class TestElem(unittest.TestCase):
 
     def test_elements(self):
-        tree1 = generate_tree(
-            [10, 8, 16, 7, 9, 14, 18, 12, 15, 11, 13, 17, 19, 6])
-        self.assertEqual(tree1.value, 10, "should equal")
-        self.assertEqual(tree1.left.left.left.value, 6, "should equal")
-        self.assertEqual(tree1.right.left.right.value, 15, "should equal")
+        tree1 = generate_tree([5, 3, 7, 2, 4, 6, 8])
+        self.assertEqual(tree1.value, 5)
+        self.assertEqual(tree1.left.left.value, 2)
+        self.assertEqual(tree1.right.left.value, 6)
         self.assertIsInstance(
-            tree1.right.right.right.right, Empty, "should belong")
-
-    def test_search(self):
-        tree2 = generate_tree(
-            [10, 8, 16, 7, 9, 14, 18, 12, 15, 11, 13, 17, 19, 6])
-        self.assertEqual(tree2.search(9), ['L', 'R'], "should equal")
-        self.assertEqual(tree2.search(17), ['R', 'R', 'L'],  "should equal")
-        self.assertEqual(tree2.search(
-            13), ['R', 'L', 'L', 'R'],  "should equal")
-        self.assertEqual([], tree2.search(10.5))
-        self.assertEqual([], tree2.search(5))
-        self.assertEqual([], tree2.search(20))
-        self.assertEqual([], tree2.search(11.5))
-        self.assertEqual([], tree2.search(30))
+            tree1.right.right.right, Empty)
+        self.assertEquals(tree1.inorder(), [2, 3, 4, 5, 6, 7, 8])
+        self.assertEqual(tree1.preorder(), [5, 3, 2, 4, 7, 6, 8])
+        self.assertEqual(tree1.postorder(), [2, 4, 3, 6, 8, 7, 5])
 
     def test_remove(self):
-        pass
+        tree1 = generate_tree([5, 3, 7, 2, 4, 6, 8])
+        tree2 = tree1.remove(5)
+        self.assertEqual(tree2.inorder(), [2, 3, 4, 6, 7, 8])
+        self.assertEqual(tree2.preorder(), [6, 3, 2, 4, 7, 8])
+        self.assertEqual(tree2.postorder(), [2, 4, 3, 8, 7, 6])
 
 
 if __name__ == "__main__":
