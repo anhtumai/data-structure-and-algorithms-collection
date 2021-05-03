@@ -16,8 +16,8 @@ Data structure table:
 | Data Structure | Implemented | Tested |
 |---|:---:|:---:|
 | __Linked List__ | | |
-| Singular list | | |
-| Double list | | |
+| Singular list | ✔ | |
+| Double list | ✔ | |
 | Circular list | | |
 | Circular double list | |
 | __Graph__ | | |
@@ -28,7 +28,7 @@ Data structure table:
 | Binary search tree | ✔ | ✔ |
 | Immutable bst | ✔ | ✔ |
 | AVL tree | ✔ | |
-| Immutable AVL tree | ✔ | |
+| Immutable AVL tree | ✔ | ✔ |
 | Red-black tree | | |
 | __Heap__ | | |
 | Min/Max heap | ✔ | ✔ |
