@@ -107,18 +107,38 @@ class Inode(AVLNode):
         return res
 
     def ll_rotate(self) -> AVLNode:
-        """Assume that a.left / b and a.left.left / c are leaves (self is a)
-            Before: (c<-b->br)<-a->ar
-            After:  c<-b->(br<-a->ar)
+        """Perform left left rotation
+            Before:
+                     a
+                    / \
+                   b  ar
+                  / \
+                 c  br
+            After:
+                    b
+                   / \
+                  c   a
+                     / \
+                    br  ar
         """
         b = self.left
         c = b.left
         return Inode(b.value, c, Inode(self.value, b.right, self.right))
 
     def rr_rotate(self) -> AVLNode:
-        """Assume that a.right / b and a.right.right / c are leaves (self is a)
-            Before: al<-a->(bl<-b->c)
+        """Perform right right rotation
+            Before:
+                    a
+                   / \
+                  al  b
+                     / \
+                    bl  c
             After:  (al<-a->bl)<-b->c
+                    b
+                   / \
+                  a   c
+                 / \
+                al bl
         """
 
         b = self.right

@@ -25,10 +25,10 @@ Data structure table:
 | Depth first search | ✔ | ✔ |
 | Djisktra shortest path algorithm | ✔ | ✔ |
 | __Tree__ | | |
-| Binary search tree | ✔ | |
+| Binary search tree | ✔ | ✔ |
 | Immutable bst | ✔ | ✔ |
 | AVL tree | ✔ | |
-| Immutable AVL tree | ✔ | ✔ |
+| Immutable AVL tree | ✔ | |
 | Red-black tree | | |
 | __Heap__ | | |
 | Min/Max heap | ✔ | ✔ |

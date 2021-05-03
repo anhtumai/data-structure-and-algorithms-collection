@@ -1,18 +1,14 @@
-"""
-This script is a copy of: https://github.com/TheAlgorithms/Python/blob/master/data_structures/linked_list/singly_linked_list.py
-"""
-
-
 class Node:
     def __init__(self, data: any):
         self.data = data
         self.next = None
+        self.prev = None
 
     def __str__(self) -> str:
         return str(self.data)
 
 
-class SinglyLinkedList:
+class DoublyLinkedList:
     def __init__(self, head: Node = None):
         self.head = head
 
@@ -43,6 +39,9 @@ class SinglyLinkedList:
     def head(self) -> Node:
         return self.head
 
+    def tail(self) -> Node:
+        return self[len(self) - 1]
+
     def insert_nth(self, index: int, data: any) -> None:
         if not 0 <= index <= len(self):
             raise IndexError("list index out of range")
@@ -52,12 +51,17 @@ class SinglyLinkedList:
         elif index == 0:
             new_node.next = self.head
             self.head = new_node
+            self.head.next.prev = self.head
         else:
             previous_node = self.head
             for _ in range(index - 1):
                 previous_node = previous_node.next
             new_node.next = previous_node.next
             previous_node.next = new_node
+
+            previous_node.next.prev = previous_node
+            if new_node.next is not None:
+                new_node.next.prev = new_node
 
     def insert_tail(self, data: any) -> None:
         self.insert_nth(len(self), data)
@@ -73,6 +77,8 @@ class SinglyLinkedList:
             current = current.next
         deleted_node = current.next
         current.next = current.next.next
+
+        current.next.prev = current
         return deleted_node.value
 
     def delete_tail(self) -> any:
@@ -81,20 +87,5 @@ class SinglyLinkedList:
     def delete_head(self) -> any:
         return self.delete_nth(0)
 
-    def stable_reverse(self):
-        res = SinglyLinkedList()
-        for elem in self:
-            res.insert_head(elem)
-        return res
-
-    def in_place_reverse(self):
-        prev = None
-        current = self.head
-        while current:
-            next_node = current.next
-            current.next = prev
-            prev = current
-            current = next_node
-
     def __str__(self):
-        return "->".join([str(elem) for elem in self])
+        return "<->".join([str(elem) for elem in self])
