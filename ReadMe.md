@@ -16,10 +16,9 @@ Data structure table:
 | Data Structure | Implemented | Tested |
 |---|:---:|:---:|
 | __Linked List__ | | |
-| Singular list | ✔ | |
-| Double list | ✔ | |
+| Singular linked list | ✔ | ✔|
+| Doubly linked list | ✔ | ✔|
 | Circular list | | |
-| Circular double list | |
 | __Graph__ | | |
 | Breadth first search | ✔ | ✔ |
 | Depth first search | ✔ | ✔ |
