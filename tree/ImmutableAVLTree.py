@@ -1,5 +1,5 @@
 class AVLNode:
-    def get_height(self):
+    def calculate_height(self):
         raise NotImplementedError
 
     def get_balance(self):
@@ -7,7 +7,14 @@ class AVLNode:
 
 
 class Empty(AVLNode):
-    def get_height(self):
+
+    def __init__(self):
+        self.height = 0
+
+    def __repr__(self):
+        return "Empty"
+
+    def calculate_height(self):
         return 0
 
     def get_balance(self):
@@ -19,8 +26,14 @@ class Empty(AVLNode):
     def remove(self, value: any) -> AVLNode:
         return Empty()
 
-    def __str__(self):
-        return "Empty"
+    def inorder(self) -> list[any]:
+        return []
+
+    def preorder(self) -> list[any]:
+        return []
+
+    def postorder(self) -> list[any]:
+        return []
 
 
 class Inode(AVLNode):
@@ -28,12 +41,16 @@ class Inode(AVLNode):
         self.value = value
         self.left = left
         self.right = right
+        self.height = self.calculate_height()
 
-    def get_height(self) -> int:
-        return 1 + max(self.left.get_height(), self.right.get_height())
+    def __repr__(self):
+        return f"({self.left}<-{self.value}->{self.right})"
+
+    def calculate_height(self) -> int:
+        return 1 + max(self.left.height, self.right.height)
 
     def get_balance(self) -> int:
-        return self.left.get_height() - self.right.get_height()
+        return self.left.height - self.right.height
 
     def get_min_value(self) -> int:
         if (isinstance(self.left, Empty)):
@@ -46,7 +63,6 @@ class Inode(AVLNode):
         else:
             res = Inode(self.value, self.left, self.right.insert(value))
 
-        # res.update_height()
         balance = res.get_balance()
 
         # when balance > 1, self.left and self.left.left must be a leaf
@@ -107,7 +123,7 @@ class Inode(AVLNode):
         return res
 
     def ll_rotate(self) -> AVLNode:
-        """Perform left left rotation
+        """Perform left left rotation (assume self is a)
             Before:
                      a
                     / \
@@ -126,14 +142,14 @@ class Inode(AVLNode):
         return Inode(b.value, c, Inode(self.value, b.right, self.right))
 
     def rr_rotate(self) -> AVLNode:
-        """Perform right right rotation
+        """Perform right right rotation (assume self is a)
             Before:
                     a
                    / \
                   al  b
                      / \
                     bl  c
-            After:  (al<-a->bl)<-b->c
+            After:
                     b
                    / \
                   a   c
@@ -155,5 +171,11 @@ class Inode(AVLNode):
         c = b.right
         return Inode(c.value, Inode(b.value, b.left, c.left), Inode(self.value, c.right, self.right))
 
-    def __str__(self):
-        return f"({self.left}<-{self.value}->{self.right})"
+    def inorder(self) -> list[any]:
+        return self.left.inorder() + [self.value] + self.right.inorder()
+
+    def preorder(self) -> list[any]:
+        return [self.value] + self.left.preorder() + self.right.preorder()
+
+    def postorder(self) -> list[any]:
+        return self.left.postorder() + self.right.postorder() + [self.value]
