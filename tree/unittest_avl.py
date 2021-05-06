@@ -1,4 +1,4 @@
-# My test case is based on @Griffin's answer on Stackoverflow
+# My test cases are based on @Griffin's answer on Stackoverflow
 # https://stackoverflow.com/a/13843966/9933734
 
 import unittest

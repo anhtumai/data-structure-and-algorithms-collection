@@ -124,6 +124,15 @@ class AVLTree:
         return is_removed
 
     def _recurs_remove(self, node: AVLNode, data: any) -> tuple[bool, AVLNode]:
+        """Recursively remove element in an AVL tree
+            Args:
+                node: AVL node
+                data: what need removing in the AVL tree
+            Returns:
+                is_inremoved: True means data is successfully removed,
+                              False means data doesn't exist in the tree
+                node: new node after removing the data
+        """
         if (isinstance(node, Empty)):
             return False, Empty()
 
@@ -219,8 +228,8 @@ class AVLTree:
     def get_inorder(self) -> list[any]:
         return self.root.inorder()
 
-    def get_preorder(self):
+    def get_preorder(self) -> list[any]:
         return self.root.preorder()
 
-    def get_postorder(self):
+    def get_postorder(self) -> list[any]:
         return self.root.postorder()
