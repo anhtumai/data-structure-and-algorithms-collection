@@ -26,7 +26,7 @@ class BST:
                 return True
             else:
                 return self._recurs_insert(node.left, data)
-        return
+        return False
 
     def search(self, data: any) -> (TreeNode, TreeNode):
         return self._recurs_search(self.root, data, Empty())

@@ -15,33 +15,33 @@ Data structure table:
 
 | Data Structure | Implemented | Tested |
 |---|:---:|:---:|
-| __Linked List__ | | |
-| Singly linked list | ✔ | ✔|
-| Doubly linked list | ✔ | ✔|
+| [__Linked List__](linkedlist) | | |
+| [Singly linked list](linkedlist/singly_linked_list.py) | ✔ | ✔|
+| [Doubly linked list](linkedlist/doubly_linked_list.py) | ✔ | ✔|
 | Circularly linked list | | |
-| __Graph__ | | |
-| Breadth first search | ✔ | ✔ |
-| Depth first search | ✔ | ✔ |
-| Djisktra shortest path algorithm | ✔ | ✔ |
-| __Tree__ | | |
-| Binary search tree | ✔ | ✔ |
-| Immutable bst | ✔ | ✔ |
-| AVL tree | | |
-| Immutable AVL tree | ✔ | ✔ |
+| [__Graph__](graph) | | |
+| [Breadth first search](graph/BFS.py) | ✔ | ✔ |
+| [Depth first search](graph/DFS.py) | ✔ | ✔ |
+| [Djisktra shortest path algorithm](graph/Djisktra_search_with_heap.py) | ✔ | ✔ |
+| [__Tree__](tree) | | |
+| [Binary search tree](tree/bst.py) | ✔ | ✔ |
+| [Immutable bst](tree/ImmutableBinarySearchTree.py) | ✔ | ✔ |
+| [AVL tree](tree/avl.py) | ✔ | ✔ |
+| [Immutable AVL tree](tree/ImmutableAVLTree.py) | ✔ | ✔ |
 | Red-black tree | | |
-| __Heap__ | | |
-| Min/Max heap | ✔ | ✔ |
-| Median Heap | ✔ | ✔ |
-| Heap sort | ✔ | ✔ |
+| [__Heap__](heap) | | |
+| [Min/Max heap](heap/minmax_heap.py) | ✔ | ✔ |
+| [Median Heap](heap/median_heap.py) | ✔ | ✔ |
+| [Heap sort](heap/heap_sort.py) | ✔ | ✔ |
 
 Algorithm table:
 
 | Algorithm | Implemented | Tested |
 |---|:---:|:---:|
-| __Divide and Conquer__ | | |
-| Merge sort | ✔ | ✔ |
-| Quick sort | ✔ | ✔ |
-| Quick select | ✔ | ✔ |
+| [__Divide and Conquer__](divide_and_conquer) | | |
+| [Merge sort](divide_and_conquer/merge_sort.py) | ✔ | ✔ |
+| [Quick sort](divide_and_conquer/quick_sort.py) | ✔ | ✔ |
+| [Quick select](divide_and_conquer/quick_select.py) | ✔ | ✔ |
 
 ## Environment
 
