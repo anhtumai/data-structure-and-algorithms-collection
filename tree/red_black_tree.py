@@ -1,13 +1,17 @@
+from sty import fg, bg, ef, rs
+
+
 class RBNode:
     pass
 
 
 class Empty(RBNode):
+
+    def __init__(self, parent: "Inode"):
+        self.parent = parent
+
     def __repr__(self):
         return "Empty"
-
-    def insert(self, data: any) -> RBNode:
-        return Inode(data, True, self)
 
     def inorder(self) -> list[any]:
         return []
@@ -20,8 +24,8 @@ class Empty(RBNode):
 
 
 class Inode(RBNode):
-    def __init__(self, value: any, is_red: bool = True, parent: RBNode = Empty(),
-                 left: RBNode = Empty(), right: RBNode = Empty()):
+    def __init__(self, value: any, is_red: bool, parent: RBNode,
+                 left: RBNode, right: RBNode):
         self.value = value
         self.parent = parent
         self.left = left
@@ -29,7 +33,9 @@ class Inode(RBNode):
         self.is_red = is_red
 
     def __repr__(self):
-        return f"({self.left}<-{self.value}->{self.right})"
+        colour_start = fg.red if self.is_red else ""
+        colour_end = fg.rs if self.is_red else ""
+        return f"({self.left}<-{colour_start}{self.value}{colour_end}->{self.right})"
 
     def get_min_value(self) -> int:
         if (isinstance(self.left, Empty)):
@@ -47,12 +53,15 @@ class Inode(RBNode):
 
 
 class RBTree:
-    def __init__(self, root=Empty()):
+    def __init__(self, root=None):
         self.root = root
 
     def insert(self, data: any) -> None:
-        if (isinstance(self.root, Empty)):
-            self.root = Inode(data, is_red=False)
+        if (not self.root):
+            self.root = Inode(data, is_red=False, parent=None,
+                              left=None, right=None)
+            self.root.left = Empty(self.root)
+            self.root.right = Empty(self.root)
         else:
             self._recurs_insert(self.root, data)
 
@@ -60,27 +69,32 @@ class RBTree:
         """
         Assumption: node cannot be root so node.parent is an Inode
         """
+
         if (isinstance(node, Empty)):
             parent, is_right = self._get_parent(node)
-            new_node = Inode(data, True, parent)
+            new_node = Inode(data, is_red=True, parent=parent,
+                             left=None, right=None)
+            new_node.left = Empty(new_node)
+            new_node.right = Empty(new_node)
             if is_right:
                 parent.right = new_node
             else:
                 parent.left = new_node
             self._try_balance(new_node)
-        elif (data < node.value):
+            return
+        if (data < node.value):
             self._recurs_insert(node.left, data)
         elif (data > node.value):
             self._recurs_insert(node.right, data)
         else:
             pass
 
-    def _try_balance(self, node: INode) -> None:
+    def _try_balance(self, node: Inode) -> None:
         """
         Assumption: node cannot be root so node.parent is an Inode
         """
         parent, is_node_right_child = self._get_parent(node)
-        if (isinstance(parent.parent, Empty) or not node.is_red or not parent.is_red):
+        if (parent is None or parent.parent is None or not (node.is_red and parent.is_red)):
             return
         grandparent, is_parent_right_child = self._get_parent(parent)
         # Assume grandparent is an Inode
@@ -96,19 +110,19 @@ class RBTree:
                 self._try_balance(grandparent)
 
     def _get_parent(self, node: RBNode) -> tuple[RBNode, bool]:
-        if (isinstance(node.parent, Empty)):
+        if not node.parent:  # node is root
             return node.parent, False
         return node.parent, node.parent.right == node
 
     def avl_rotate(self, node: Inode, parent: Inode, grandparent: Inode) -> None:
         # LR rotation
         if (grandparent.value > parent.value and parent.value < node.value):
-            self.ll_rotate(parent)
-            self.rr_rotate(grandparent, to_recolor=True)
-        # RL rotation
-        elif (grandparent.value < parent.value and parent.value > node.value):
             self.rr_rotate(parent)
             self.ll_rotate(grandparent, to_recolor=True)
+        # RL rotation
+        elif (grandparent.value < parent.value and parent.value > node.value):
+            self.ll_rotate(parent)
+            self.rr_rotate(grandparent, to_recolor=True)
         # LL rotation
         elif (grandparent.value > parent.value and parent.value > node.value):
             self.ll_rotate(grandparent, to_recolor=True)
@@ -132,6 +146,7 @@ class RBTree:
                      / \
                     br  ar
         """
+        parent, is_right = self._get_parent(a)
 
         b = a.left
         br = b.right
@@ -140,13 +155,21 @@ class RBTree:
         a.left = br
 
         if to_recolor:
+            c = b.left
             b.is_red, a.is_red, c.is_red = False, True, True
 
-        parent, is_right = self._get_parent(a)
-        if is_right:
-            parent.right = b
+        # Update parent
+        b.parent = parent
+        a.parent = b
+        br.parent = a
+
+        if parent:
+            if is_right:
+                parent.right = b
+            else:
+                parent.left = b
         else:
-            parent.left = b
+            self.root = b
 
     def rr_rotate(self, a: Inode, to_recolor: bool = False) -> None:
         """Perform right right rotation
@@ -164,17 +187,28 @@ class RBTree:
                 al bl
         """
 
+        parent, is_right = self._get_parent(a)
+
         b = a.right
         bl = b.left
 
         b.left = a
         a.right = bl
 
+        c = b.right
+
         if to_recolor:
             b.is_red, a.is_red, c.is_red = False, True, True
 
-        parent, is_right = self._get_parent(a)
-        if is_right:
-            parent.right = b
+        # Update parent
+        b.parent = parent
+        a.parent = b
+        bl.parent = a
+
+        if parent:
+            if is_right:
+                parent.right = b
+            else:
+                parent.left = b
         else:
-            parent.left = b
+            self.root = b
