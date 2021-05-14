@@ -1,4 +1,5 @@
 from sty import fg, bg, ef, rs
+import sys
 
 
 class RBNode:
@@ -271,8 +272,8 @@ class RBTree:
         """
         Assumption: node has 0 or 1 child.
         """
-        not_nil_child = node.left if not isinstance(
-            node.left, Empty) else node.right
+        not_nil_child = node.right if isinstance(
+            node.left, Empty) else node.left
         if node == self.root:
             self.root = not_nil_child
             self.root.parent = None
@@ -301,17 +302,39 @@ class RBTree:
         # Actual remove something
         parent, is_right = self._get_parent(node)
         new_node = Empty(parent)
+
         if is_right:
             parent.right = new_node
         else:
             parent.left = new_node
 
         # Remove double black mark (no node is removed in this phase)
-        self.__case_2(new_node)
+        self.__case_1(new_node)
 
-    def __case_2(self, node: RBNode) -> None:
+    def __case_1(self, node: RBNode) -> None:
         if self.root == node:
             node.is_red = False
+            return
+        self.__case_2(node)
+
+    def __case_2(self, node: RBNode) -> None:
+        """
+        Case 2:
+        - Sibling is black and both sibling children are red
+        """
+        sibling, is_sibling_right = self._get_sibling(node)
+        parent, _ = self._get_parent(node)
+        if (
+            sibling.is_black() and
+            sibling.left.is_red and
+            sibling.right.is_red
+        ):
+            if is_sibling_right:
+                sibling.right.is_red = False
+                self.rr_rotate(parent)
+            else:
+                sibling.left.is_red = False
+                self.ll_rotate(parent)
             return
         self.__case_3(node)
 
@@ -324,16 +347,18 @@ class RBTree:
         """
         sibling, _ = self._get_sibling(node)
         parent, _ = self._get_parent(node)
-        if (sibling.is_black() and
+        if (
+            sibling.is_black() and
             sibling.left.is_black() and
-                sibling.right.is_black()):
+            sibling.right.is_black()
+        ):
             if parent.is_red:
                 parent.is_red = False
                 sibling.is_red = True
             else:  # now parent become double black
                 parent.is_red = False
                 sibling.is_red = True
-                self.__case_2(parent)
+                self.__case_1(parent)
             return
 
         self.__case_4(node)
@@ -351,9 +376,9 @@ class RBTree:
                 self.ll_rotate(parent)
             else:
                 self.rr_rotate(parent)
-            self.__case_2(node)
+            self.__case_1(node)
             return
-        pass
+        self.__case_5(node)
 
     def __case_5(self, node: RBNode) -> None:
         """
@@ -366,9 +391,11 @@ class RBTree:
         parent, _ = self._get_parent(node)
         closer_child = sibling.left if is_sibling_right else sibling.right
         outer_child = sibling.right if is_sibling_right else sibling.left
-        if (sibling.is_black() and
+        if (
+            sibling.is_black() and
             closer_child.is_red and
-                outer_child.is_black()):
+            outer_child.is_black()
+        ):
             sibling.is_red, closer_child.is_red = closer_child.is_red, sibling.is_red
             if is_sibling_right:
                 self.ll_rotate(sibling)
@@ -387,12 +414,24 @@ class RBTree:
         parent, _ = self._get_parent(node)
         closer_child = sibling.left if is_sibling_right else sibling.right
         outer_child = sibling.right if is_sibling_right else sibling.left
-        if (sibling.is_black() and
+        if (
+            sibling.is_black() and
             closer_child.is_black() and
-                outer_child.is_red):
-            parent.is_red, sibling.is_red = sibling.is_red, parent.is_reds
+            outer_child.is_red
+        ):
+            parent.is_red, sibling.is_red = sibling.is_red, parent.is_red
             if is_sibling_right:
                 self.rr_rotate(parent)
             else:
                 self.ll_rotate(parent)
-            outer_child.is_red = False
+            sibling.left.is_red = False
+            sibling.right.is_red = False
+
+    def get_inorder(self) -> list[any]:
+        return self.root.inorder()
+
+    def get_preorder(self) -> list[any]:
+        return self.root.preorder()
+
+    def get_postorder(self) -> list[any]:
+        return self.root.postorder()
