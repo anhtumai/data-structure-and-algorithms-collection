@@ -2,12 +2,10 @@
 # https://stackoverflow.com/a/13843966/9933734
 
 import unittest
-from functools import reduce
-from typing import List
 from avl import AVLNode, Empty, Inode, AVLTree
 
 
-def generate_tree(elems: list[any]) -> AVLNode:
+def generate_tree(elems: list[any]) -> AVLTree:
     res = AVLTree()
     for elem in elems:
         res.insert(elem)

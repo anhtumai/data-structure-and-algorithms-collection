@@ -28,7 +28,7 @@ Data structure table:
 | [Immutable bst](tree/ImmutableBinarySearchTree.py) | ✔ | ✔ |
 | [AVL tree](tree/avl.py) | ✔ | ✔ |
 | [Immutable AVL tree](tree/ImmutableAVLTree.py) | ✔ | ✔ |
-| Red-black tree | | |
+| [Red Black tree](tree/red_black_tree.py)| ✔ | partial |
 | [__Heap__](heap) | | |
 | [Min/Max heap](heap/minmax_heap.py) | ✔ | ✔ |
 | [Median Heap](heap/median_heap.py) | ✔ | ✔ |

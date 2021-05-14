@@ -129,8 +129,8 @@ class AVLTree:
                 node: AVL node
                 data: what need removing in the AVL tree
             Returns:
-                is_inremoved: True means data is successfully removed,
-                              False means data doesn't exist in the tree
+                is_removed: True means data is successfully removed,
+                            False means data doesn't exist in the tree
                 node: new node after removing the data
         """
         if (isinstance(node, Empty)):
@@ -174,7 +174,7 @@ class AVLTree:
         # RL rotation
         if (balance < -1 and node.right.get_balance() > 0):
             node.right = self.ll_rotate(node.right)
-            return is_removed, self._rotate(node)
+            return is_removed, self.rr_rotate(node)
 
         return is_removed, node
 
