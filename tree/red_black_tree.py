@@ -310,13 +310,6 @@ class RBTree:
                 self._remove_double_black_node(node)
 
     def _remove_double_black_node(self, node: Inode) -> None:
-        """
-        Big case: deleted node is black and its child is also black.
-        -> Double black node case
-        Loop through each case recursively.
-        Assumption: this black node only doesn't have any child.
-        (Because if it has 1 child then that child must be red)
-        """
         # Actual remove something
         parent, is_right = self._get_parent(node)
         new_node = Empty(parent)
