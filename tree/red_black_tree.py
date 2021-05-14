@@ -12,7 +12,7 @@ class Empty(RBNode):
         self.is_red = False
 
     def is_black(self) -> bool:
-        return False
+        return True
 
     def __repr__(self):
         return "Empty"
@@ -282,7 +282,7 @@ class RBTree:
             # Assume that red node cannot have any children
             self._remove_leaf(node)
         else:
-            if (isinstance(not_nil_child, Inode) and not_nil_child.is_red):
+            if (not_nil_child.is_red):
                 node.value = not_nil_child.value
                 node.left = not_nil_child.left
                 node.right = not_nil_child.right
@@ -292,168 +292,107 @@ class RBTree:
 
     def _remove_double_black_node(self, node: Inode) -> None:
         """
-        Loop through each case recursively until we reach a terminating case.
-        What we're left with is a leaf node which is ready to be deleted without consequences
+        Big case: deleted node is black and its child is also black.
+        -> Double black node case
+        Loop through each case recursively.
+        Assumption: this black node only doesn't have any child.
+        (Because if it has 1 child then that child must be red)
         """
-        self.__case_1(node)
-        self._remove_leaf(node)
+        # Actual remove something
+        parent, is_right = self._get_parent(node)
+        new_node = Empty(parent)
+        if is_right:
+            parent.right = new_node
+        else:
+            parent.left = new_node
 
-    def __case_1(self, node):
-        """
-        Case 1 is when there's a double black node on the root
-        Because we're at the root, we can simply remove it
-        and reduce the black height of the whole tree.
-            __|10B|__                  __10B__
-           /         \      ==>       /       \
-          9B         20B            9B        20B
-        """
+        # Remove double black mark (no node is removed in this phase)
+        self.__case_2(new_node)
+
+    def __case_2(self, node: RBNode) -> None:
         if self.root == node:
             node.is_red = False
             return
-        self.__case_2(node)
-
-    def __case_2(self, node):
-        """
-        Case 2 applies when
-            the parent is BLACK
-            the sibling is RED
-            the sibling's children are BLACK or NIL
-        It takes the sibling and rotates it
-                         40B                                              60B
-                        /   \       --CASE 2 ROTATE-->                   /   \
-                    |20B|   60R       LEFT ROTATE                      40R   80B
-    DBL BLACK IS 20----^   /   \      SIBLING 60R                     /   \
-                         50B    80B                                |20B|  50B
-            (if the sibling's direction was left of it's parent, we would RIGHT ROTATE it)
-        Now the original node's parent is RED
-        and we can apply case 4 or case 6
-        """
-        parent = node.parent
-        sibling, is_sibling_right = self._get_sibling(node)
-        if (sibling.is_red and
-            (not parent.is_red) and
-            (isinstance(sibling.left, Empty) or not sibling.left.is_red) and
-                (isinstance(sibling.right, Empty) or not sibling.right.is_red)):
-            if is_sibling_right:
-                self.rr_rotate(parent)
-            else:
-                self.ll_rotate(parent)
-
-            parent.is_red = True
-            sibling.is_red = False
-            return self.__case_1(node)
         self.__case_3(node)
 
-    def __case_3(self, node):
+    def __case_3(self, node: RBNode) -> None:
         """
-        Case 3 deletion is when:
-            the parent is BLACK
-            the sibling is BLACK
-            the sibling's children are BLACK
-        Then, we make the sibling red and
-        pass the double black node upwards
-                            Parent is black
-               ___50B___    Sibling is black                       ___50B___
-              /         \   Sibling's children are black          /         \
-           30B          80B        CASE 3                       30B        |80B|  Continue with other cases
-          /   \        /   \        ==>                        /  \        /   \
-        20B   35R    70B   |90B|<---REMOVE                   20B  35R     70R   X
-              /  \                                               /   \
-            34B   37B                                          34B   37B
+        Assumption: sibling must be black inode, since we have just deleted a black inode
+        Case 3:
+        - Sibling is black and both sibling children are black
+        (Empty node is also counted as black node)
         """
-        parent = node.parent
         sibling, _ = self._get_sibling(node)
+        parent, _ = self._get_parent(node)
         if (sibling.is_black() and
-            parent.is_black() and
-            (isinstance(sibling.left, Empty) or sibling.left.is_black()) and
-                (isinstance(sibling.right, Empty) or sibling.right.is_black())):
-            # color the sibling red and forward the double black node upwards
-            # (call the cases again for the parent)
-            sibling.is_red = True
-            return self.__case_1(parent)  # start again
+            sibling.left.is_black() and
+                sibling.right.is_black()):
+            if parent.is_red:
+                parent.is_red = False
+                sibling.is_red = True
+            else:  # now parent become double black
+                parent.is_red = False
+                sibling.is_red = True
+                self.__case_2(parent)
+            return
 
         self.__case_4(node)
 
-    def __case_4(self, node):
+    def __case_4(self, node: RBNode) -> None:
         """
-        If the parent is red and the sibling is black with no red children,
-        simply swap their colors
-        DB-Double Black
-                __10R__                   __10B__        The black height of the left subtree has been incremented
-               /       \                 /       \       And the one below stays the same
-             DB        15B      ===>    X        15R     No consequences, we're done!
-                      /   \                     /   \
-                    12B   17B                 12B   17B
+        Case 4: sibling is red
         """
-        parent = node.parent
-        if parent.is_red:
-            sibling, _ = self._get_sibling(node)
-            if (sibling.is_black() and
-                (isinstance(sibling.left, Empty) or sibling.left.is_black()) and
-                    (isinstance(sibling.right, Empty) or sibling.right.is_black())):
-                parent.is_red, sibling.is_red = sibling.is_red, parent.is_red  # switch colors
-                return  # Terminating
-        self.__case_5(node)
+        sibling, _ = self._get_sibling(node)
+        parent, is_right = self._get_parent(node)
+        if (sibling.is_red):
+            sibling.is_red, parent.is_red = parent.is_red, sibling.is_red
+            # Rotate parent toward double black direction
+            if is_right:
+                self.ll_rotate(parent)
+            else:
+                self.rr_rotate(parent)
+            self.__case_2(node)
+            return
+        pass
 
-    def __case_5(self, node):
+    def __case_5(self, node: RBNode) -> None:
         """
-        Case 5 is a rotation that changes the circumstances so that we can do a case 6
-        If the closer node is red and the outer BLACK or NIL, we do a left/right rotation, depending on the orientation
-        This will showcase when the CLOSER NODE's direction is RIGHT
-              ___50B___                                                    __50B__
-             /         \                                                  /       \
-           30B        |80B|  <-- Double black                           35B      |80B|        Case 6 is now
-          /  \        /   \      Closer node is red (35R)              /   \      /           applicable here,
-        20B  35R     70R   X     Outer is black (20B)               30R    37B  70R           so we redirect the node
-            /   \                So we do a LEFT ROTATION          /   \                      to it :)
-          34B  37B               on 35R (closer node)           20B   34B
+        Case 5:
+        - Sibling is black
+        - Sibling child who is far from DB is black
+        - Silbing child who is near DB is red
         """
         sibling, is_sibling_right = self._get_sibling(node)
-        closer_node = sibling.left if is_sibling_right else sibling.right
-        outer_node = sibling.right if is_sibling_right else sibling.left
-        if ((isinstance(closer_node, Inode) and closer_node.is_red) and
-            (isinstance(outer_node, Empty) or outer_node.is_black()) and
-                sibling.is_black()):
+        parent, _ = self._get_parent(node)
+        closer_child = sibling.left if is_sibling_right else sibling.right
+        outer_child = sibling.right if is_sibling_right else sibling.left
+        if (sibling.is_black() and
+            closer_child.is_red and
+                outer_child.is_black()):
+            sibling.is_red, closer_child.is_red = closer_child.is_red, sibling.is_red
             if is_sibling_right:
                 self.ll_rotate(sibling)
             else:
                 self.rr_rotate(sibling)
-            closer_node.is_red = False
-            sibling.is_red = True
-
         self.__case_6(node)
 
-        self.__case_6(node)
-
-    def __case_6(self, node):
+    def __case_6(self, node: RBNode) -> None:
         """
-        Case 6 requires
-            SIBLING to be BLACK
-            OUTER NODE to be RED
-        Then, does a right/left rotation on the sibling
-        This will showcase when the SIBLING's direction is LEFT
-                            Double Black
-                    __50B__       |                               __35B__
-                   /       \      |                              /       \
-      SIBLING--> 35B      |80B| <-                             30R       50R
-                /   \      /                                  /   \     /   \
-             30R    37B  70R   Outer node is RED            20B   34B 37B    80B
-            /   \              Closer node doesn't                           /
-         20B   34B                 matter                                   70R
-                               Parent doesn't
-                                   matter
-                               So we do a right rotation on 35B!
+        Case 6:
+        - Sibling is black
+        - Sibling child who is far from DB is red
+        - Silbing child who is near DB is black
         """
         sibling, is_sibling_right = self._get_sibling(node)
-        outer_node = sibling.right if is_sibling_right else sibling.left
-
+        parent, _ = self._get_parent(node)
+        closer_child = sibling.left if is_sibling_right else sibling.right
+        outer_child = sibling.right if is_sibling_right else sibling.left
         if (sibling.is_black() and
-                (isinstance(outer_node, Inode) and outer_node.is_red)):
-            is_parent_red = sibling.parent.is_red
+            closer_child.is_black() and
+                outer_child.is_red):
+            parent.is_red, sibling.is_red = sibling.is_red, parent.is_reds
             if is_sibling_right:
-                self.rr_rotate(sibling.parent)
+                self.rr_rotate(parent)
             else:
-                self.ll_rotate(sibling.parent)
-            sibling.is_red = is_parent_red
-            sibling.right.is_red = False
-            sibling.left.is_red = False
+                self.ll_rotate(parent)
+            outer_child.is_red = False
