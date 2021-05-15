@@ -2,7 +2,7 @@
 Origin of sample test: Graph Search, Shortest Paths, and Data Structures course by Standford
 """
 
-from compute_strong_components import compute_scc
+from compute_strongly_connected_components import compute_scc
 
 import resource
 import sys
