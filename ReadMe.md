@@ -42,6 +42,7 @@ Algorithm table:
 | [Merge sort](divide_and_conquer/merge_sort.py) | ✔ | ✔ |
 | [Quick sort](divide_and_conquer/quick_sort.py) | ✔ | ✔ |
 | [Quick select](divide_and_conquer/quick_select.py) | ✔ | ✔ |
+| [Closest Points](divide_and_conquer/closest_points.py) | ✔ | ✔ |
 
 ## Environment
 
