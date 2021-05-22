@@ -12,6 +12,8 @@ class CircularLinkedList:
         self.head = head
 
     def __iter__(self):
+        if self.head is None:
+            return
         node = self.head
         while True:
             yield node.data
@@ -45,7 +47,7 @@ class CircularLinkedList:
         """
         String representation/visualization of a Linked Lists
         """
-        return "->".join([str(elem) for elem in self])
+        return "->".join([str(elem) for elem in self]) + "->*"
 
     def __getitem__(self, index):
         """
@@ -122,14 +124,17 @@ class CircularLinkedList:
         else:
             raise RuntimeError("List is empty")
 
-    def get_tail(self) -> any:
+    def get_tail_node(self) -> Node:
         if self.head:
             current = self.head
-            while current.next is not None:
+            while current.next != self.head:
                 current = current.next
-            return current.data
+            return current
         else:
             raise RuntimeError("List is empty")
+
+    def get_tail(self) -> any:
+        return self.get_tail_node().data
 
     def insert_nth(self, index: int, data: any) -> None:
         if not 0 <= index <= len(self):
@@ -156,8 +161,9 @@ class CircularLinkedList:
             raise IndexError("List index out of range")
         if (index == 0):
             deleted_node = self.head
+            tail_node = self.get_tail_node()
             self.head = self.head.next
-            self.get_tail().next = self.head
+            tail_node.next = self.head
         else:
             previous_node = self._get_node(index - 1)
             deleted_node = previous_node.next

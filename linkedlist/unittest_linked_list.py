@@ -2,6 +2,7 @@ import unittest
 
 from singly_linked_list import SinglyLinkedList
 from doubly_linked_list import DoublyLinkedList
+from circular_linked_list import CircularLinkedList
 
 
 def convert_array_to_singly_linked_list(elems: list[any]) -> SinglyLinkedList:
@@ -13,6 +14,13 @@ def convert_array_to_singly_linked_list(elems: list[any]) -> SinglyLinkedList:
 
 def convert_array_to_doubly_linked_list(elems: list[any]) -> DoublyLinkedList:
     res = DoublyLinkedList()
+    for elem in elems:
+        res.insert_tail(elem)
+    return res
+
+
+def convert_array_to_circular_linked_list(elems: list[any]) -> CircularLinkedList:
+    res = CircularLinkedList()
     for elem in elems:
         res.insert_tail(elem)
     return res
@@ -134,6 +142,57 @@ class TestDoublyLinkedList(unittest.TestCase):
         self.assertEqual(doubly_list.get_head(), 7)
         self.assertEqual(doubly_list.get_tail(), 0)
         self.assertEqual(doubly_list[2], 5)
+
+
+class TestCircularLinkedList(unittest.TestCase):
+    def test_basic_functionality(self):
+        circular_list = convert_array_to_circular_linked_list(
+            [1, 2, 3, 4, 5, 6, 7])
+        self.assertEqual(circular_list._get_node(
+            len(circular_list) - 1).next.data, 1)
+        self.assertEqual(circular_list[3], 4)
+        self.assertEqual(circular_list.get_head(), 1)
+        self.assertEqual(circular_list.get_tail(), 7)
+        self.assertEqual(circular_list.head.next.next.next.next.data, 5)
+        self.assertEqual(circular_list[3], 4)
+
+    def test_insert(self):
+        circular_list = convert_array_to_circular_linked_list(
+            [1, 2, 3, 5, 6, 7])
+        circular_list.insert_nth(3, 4)
+        self.assertEqual(circular_list[3], 4)
+        circular_list.insert_tail(8)
+        self.assertEqual(circular_list.get_tail(), 8)
+        self.assertEqual(circular_list.get_tail_node().next.data, 1)
+        circular_list.insert_head(0)
+        self.assertEqual(circular_list.get_head(), 0)
+        self.assertEqual(circular_list[1], 1)
+
+        self.assertEqual(circular_list.get_tail_node().next.data, 0)
+
+    def test_remove(self):
+        circular_list = convert_array_to_circular_linked_list(
+            [0, 1, 2, 3, 5, 6, 7, 8])
+        self.assertEqual(circular_list.get_tail_node().next.data, 0)
+        circular_list.delete_head()
+        self.assertEqual(circular_list.get_tail_node().next.data, 1)
+        a = circular_list.delete_tail()
+        self.assertEqual(circular_list.get_head(), 1)
+        self.assertEqual(circular_list.get_tail(), 7)
+        circular_list.delete_nth(2)
+        self.assertEqual(circular_list[2], 5)
+        circular_list.delete_head()
+        self.assertEqual(circular_list.get_tail_node().next.data, 2)
+        circular_list.delete_tail()
+        self.assertEqual(circular_list.get_tail_node().next.data, 2)
+
+    def test_set_item(self):
+        singly_list = convert_array_to_singly_linked_list(
+            [0, 1, 2, 3, 4, 5, 6, 7])
+        singly_list[1] = 2
+        self.assertEqual(singly_list[1], 2)
+        singly_list[7] = 100
+        self.assertEqual(singly_list[7], 100)
 
 
 if __name__ == "__main__":

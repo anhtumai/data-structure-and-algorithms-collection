@@ -18,6 +18,7 @@ Data structure table:
 | [__Linked List__](linkedlist) | | |
 | [Singly linked list](linkedlist/singly_linked_list.py) | ✔ | ✔|
 | [Doubly linked list](linkedlist/doubly_linked_list.py) | ✔ | ✔|
+| [Circular linked list](linkedlist/circular_linked_list.py) | ✔ | ✔|
 | Circularly linked list | | |
 | [__Graph__](graph) | | |
 | [Breadth first search](graph/BFS.py) | ✔ | ✔ |
