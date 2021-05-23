@@ -19,11 +19,14 @@ Data structure table:
 | [Singly linked list](linkedlist/singly_linked_list.py) | ✔ | ✔|
 | [Doubly linked list](linkedlist/doubly_linked_list.py) | ✔ | ✔|
 | [Circular linked list](linkedlist/circular_linked_list.py) | ✔ | ✔|
+| [Floyd cycle detection](linkedlist/floyd_cycle_detection.py) | ✔ | ✔|
 | Circularly linked list | | |
 | [__Graph__](graph) | | |
 | [Breadth first search](graph/BFS.py) | ✔ | ✔ |
 | [Depth first search](graph/DFS.py) | ✔ | ✔ |
 | [Djisktra shortest path algorithm](graph/Djisktra_search_with_heap.py) | ✔ | ✔ |
+| [Topological Sort](graph/topological_sort.py) | ✔ | ✔ |
+| [Computing SCC](graph/compute_strongly_connected_components.py) | ✔ | ✔ |
 | [__Tree__](tree) | | |
 | [Binary search tree](tree/bst.py) | ✔ | ✔ |
 | [Immutable bst](tree/ImmutableBinarySearchTree.py) | ✔ | ✔ |
