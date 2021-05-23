@@ -1,3 +1,13 @@
+"""
+Problem: Given a linked list with cycle, detect the start of cycle_detection
+Example: linked_list: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+                                ^                   |
+                                |                   |
+                                 -------------------
+cycle_detection(linked_list) -> (True, Node(3))
+For linked list without any cycle, cycle_detection(linked_list) -> (False, None)
+"""
+
 from singly_linked_list import SinglyLinkedList, Node
 
 
