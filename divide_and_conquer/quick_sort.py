@@ -1,25 +1,28 @@
 """
 Stable quick sort: generate a new array, keep the order of original array
-In place quick sort: mutate the order of original array with partitionaing technique
+In place quick sort: mutate the order of original array with partitioning
 
 Tested with Hackerrank: https://www.hackerrank.com/challenges/quicksort1/
 """
 
 
 def stable_quick_sort(arr: list[any]) -> list[any]:
-    if (len(arr) <= 1):
+    """
+    Quick sort without mutating original array
+    """
+    if len(arr) <= 1:
         return arr
     pivot = arr[int((len(arr) - 1) / 2)]
     smaller = []
     equal = []
     bigger = []
-    for x in arr:
-        if x < pivot:
-            smaller.append(x)
-        elif x > pivot:
-            bigger.append(x)
+    for elem in arr:
+        if elem < pivot:
+            smaller.append(elem)
+        elif elem > pivot:
+            bigger.append(elem)
         else:
-            equal.append(x)
+            equal.append(elem)
     return stable_quick_sort(smaller) + equal + stable_quick_sort(bigger)
 
 # Pseudo code for Partition
@@ -33,11 +36,18 @@ def stable_quick_sort(arr: list[any]) -> list[any]:
 # - A[left], A[i-1] = A[i-1], A[left]
 
 
-def in_place_quick_sort(arr: list) -> None:
+def in_place_quick_sort(arr: list[any]) -> None:
+    """
+    Mutate the original array to sorted state
+    """
     _partition(arr, 0, len(arr) - 1)
 
 
-def _partition(arr: list, left: int, right: int) -> None:
+def _partition(arr: list[any], left: int, right: int) -> None:
+    """
+    Choose the first element as a pivot
+    Move all smaller elems to the left, all bigger (or equal) elems to the right
+    """
     if left >= right:
         return
     pivot = arr[left]
