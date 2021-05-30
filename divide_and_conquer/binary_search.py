@@ -12,16 +12,18 @@ Tested with Leetcode: https://leetcode.com/problems/binary-search
 
 
 def recursive_binary_search(l: list[any], target: any) -> int:
+    """A tail recursive version of binary search with a helper function"""
 
-    def _binary_search(xs: list[any], checkpoint):
+    def _binary_search(xs: list[any], checkpoint: int) -> int:
+        # checkpoint argument is a memoir to calculate index of target
         if (len(xs)) == 0:
             return -1
         if (len(xs)) == 1 and xs[0] != target:
             return -1
         middle = len(xs) // 2
-        if (target < xs[middle]):
+        if target < xs[middle]:
             return _binary_search(xs[:middle], checkpoint)
-        elif (target > xs[middle]):
+        elif target > xs[middle]:
             return _binary_search(xs[middle:], checkpoint + middle)
         return checkpoint + middle
 
@@ -32,9 +34,9 @@ def binary_search(xs: list[any], target: any) -> int:
     left, right = 0, len(xs) - 1
     while left <= right:
         middle = (right + left) // 2
-        if (target < xs[middle]):
+        if target < xs[middle]:
             right = middle - 1
-        elif (target > xs[middle]):
+        elif target > xs[middle]:
             left = middle + 1
         else:
             return middle
