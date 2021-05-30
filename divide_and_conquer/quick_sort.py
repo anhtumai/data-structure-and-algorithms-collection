@@ -1,6 +1,8 @@
 """
 Stable quick sort: generate a new array, keep the order of original array
-In place quick sort: mutate the order of original array
+In place quick sort: mutate the order of original array with partitionaing technique
+
+Tested with Hackerrank: https://www.hackerrank.com/challenges/quicksort1/
 """
 
 
