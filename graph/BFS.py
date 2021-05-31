@@ -1,39 +1,53 @@
+"""
+Breadth First Search
+Given a graph which is represented by adjacent lists, starting node and destination node
+For example:
+graph = { "A" : ["B", "C"], "B": ["D"] } means there exists a path A -> B, A -> C and B -> D
+
+Assume all paths have same length.
+
+Return: a list, representing the shortest path from starting to destionation node
+
+Example: bfs({ "A" : ["B", "C"], "B": ["D"] }, "A", "D") -> ["A", "B", "D"]
+
+"""
+
 from queue import Queue
 
-Graph = dict[any, list[any]]
-ParentDict = dict[any, any]
-
-graph = {
-    "A": ["B", "C"],
-    "B": ["D", "E"],
-    "C": ["B", "F"],
-    "D": [],
-    "E": ["F"],
-    "F": []
-}
+Node = any
+Graph = dict[Node, list[Node]]
+ParentDict = dict[Node, Node]
 
 
-def get_traverse_path(graph: Graph, s: any) -> ParentDict:
+def traverse(graph: Graph, start: Node) -> ParentDict:
+    """Traverse through a graph from start node
+    Return a dictionary which contains all nodes with their parents as values
+
+    >> traverse({ "A": ["B", "C"], "B": ["D"] }, "A") -> {"B": "A", "C": "A", "D": "B"}
+    """
 
     queue = Queue()
-    parent = {}
+    parents = {}
     explored = set()
 
-    explored.add(s)
-    queue.put(s)
+    explored.add(start)
+    queue.put(start)
 
     while not queue.empty():
-        v = queue.get()
-        for w in graph[v]:
-            if w not in explored:
-                explored.add(w)
-                parent[w] = v
-                queue.put(w)
+        new_node: Node = queue.get()
+        if new_node in graph:
+            for neighbour in graph[new_node]:
+                if neighbour not in explored:
+                    explored.add(neighbour)
+                    parents[neighbour] = new_node
+                    queue.put(neighbour)
 
-    return parent
+    return parents
 
 
-def get_path(parent: ParentDict, start: any, end: any) -> list[any]:
+def get_path(parent: ParentDict, start: Node, end: Node) -> list[Node]:
+    """Get shortest path from start to end node from the parent dict
+    """
     path = [end]
     while end != start:
         path.append(parent[end])
@@ -42,14 +56,25 @@ def get_path(parent: ParentDict, start: any, end: any) -> list[any]:
     return path
 
 
-def bfs(graph: Graph, start: any, end: any) -> list[any]:
-    parents = get_traverse_path(graph, start)
+def bfs(graph: Graph, start: Node, end: Node) -> list[Node]:
+    """Get shortest path from start to end node from a graph
+    """
+    parents = traverse(graph, start)
     if end in parents:
         path = get_path(parents, start, end)
         return path
-    else:
-        return []
+    return []
 
 
-a = bfs(graph, "A", "F")
-print(a)
+if __name__ == "__main__":
+    sample_graph = {
+        "A": ["B", "C"],
+        "B": ["D", "E"],
+        "C": ["B", "F"],
+        "D": [],
+        "E": ["F"],
+        "F": []
+    }
+
+    shortest_path: list[str] = bfs(sample_graph, "A", "F")
+    print(shortest_path)  # ["A", "C", "F"]
