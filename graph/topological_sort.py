@@ -2,7 +2,7 @@
 Topological Sort
 
 Given a DAG (Directed Acyclic Graph).
-Acycli graph is a graph doesn't have any cycle
+Acyclic graph is a graph doesn't have any cycle
 
 Return a topological ordering, an ordering of the nodes where for each directed
 edge from node A to node B, node A appears before node B in the ordering.
