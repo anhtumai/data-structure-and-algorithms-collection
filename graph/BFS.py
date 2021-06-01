@@ -19,28 +19,29 @@ Graph = dict[Node, list[Node]]
 ParentDict = dict[Node, Node]
 
 
-def traverse(graph: Graph, start: Node) -> ParentDict:
-    """Traverse through a graph from start node
-    Return a dictionary which contains all nodes with their parents as values
+def get_parents(graph: Graph, start: Node) -> ParentDict:
+    """Return a key-value pair of a node and its parent
+    when traversing down a path from a start node
 
-    >> traverse({ "A": ["B", "C"], "B": ["D"] }, "A") -> {"B": "A", "C": "A", "D": "B"}
+    >> get_parents({ "A": ["B", "C"], "B": ["D"] }, "A") -> {"B": "A", "C": "A", "D": "B"}
     """
 
     queue = Queue()
-    parents = {}
-    explored = set()
+    parents: ParentDict = {}
+    explored: set[Node] = set()
 
     explored.add(start)
     queue.put(start)
 
     while not queue.empty():
         new_node: Node = queue.get()
-        if new_node in graph:
-            for neighbour in graph[new_node]:
-                if neighbour not in explored:
-                    explored.add(neighbour)
-                    parents[neighbour] = new_node
-                    queue.put(neighbour)
+        if new_node not in graph:
+            continue
+        for neighbour in graph[new_node]:
+            if neighbour not in explored:
+                explored.add(neighbour)
+                parents[neighbour] = new_node
+                queue.put(neighbour)
 
     return parents
 
@@ -59,7 +60,7 @@ def get_path(parent: ParentDict, start: Node, end: Node) -> list[Node]:
 def bfs(graph: Graph, start: Node, end: Node) -> list[Node]:
     """Get shortest path from start to end node from a graph
     """
-    parents = traverse(graph, start)
+    parents = get_parents(graph, start)
     if end in parents:
         path = get_path(parents, start, end)
         return path
@@ -71,10 +72,8 @@ if __name__ == "__main__":
         "A": ["B", "C"],
         "B": ["D", "E"],
         "C": ["B", "F"],
-        "D": [],
-        "E": ["F"],
-        "F": []
+        "E": ["F"]
     }
 
-    shortest_path: list[str] = bfs(sample_graph, "A", "F")
+    shortest_path: list[Node] = bfs(sample_graph, "A", "F")
     print(shortest_path)  # ["A", "C", "F"]
