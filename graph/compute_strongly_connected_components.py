@@ -8,7 +8,7 @@ then it is called SCC.
 
 Example:
 >> graph1 = {0: [1], 1: [2], 2: [0, 3], 3: [4], 4: [5, 7], 5: [6], 6: [4, 7]}                                                                                         >>> compute_sccs(graph1))
->> [[0, 2, 1], [3], [4, 6, 5], [7]]  
+>> [[0, 2, 1], [3], [4, 6, 5], [7]] 
 
 
 Approach: Using Kosaraju Algorithm:
@@ -108,6 +108,9 @@ def get_strongly_connected_components(graph: Graph, stack: Stack) -> list[list[N
 
 
 def compute_sccs(graph: Graph) -> list[list[Node]]:
+    """
+    Given a directed graph, return the list of strongly connected components
+    """
     reverse_graph = reverse(graph)
     stack = get_dfs_stack(graph)
     sccs = get_strongly_connected_components(reverse_graph, stack)
@@ -120,16 +123,16 @@ if __name__ == "__main__":
 
     graph2 = {
         1: [10],
-        3: [6,9],
+        3: [6, 9],
         7: [12],
         9: [2, 14],
         12: [9],
         4: [11],
-        2: [5,10],
+        2: [5, 10],
         5: [3],
-        15: [3,8],
-        8:[11],
-        11:[5]
+        15: [3, 8],
+        8: [11],
+        11: [5],
     }
     print(compute_sccs(graph2))
     # [[15], [8], [4], [11], [7], [12], [3, 5, 2, 9], [14], [6], [1], [10]]
