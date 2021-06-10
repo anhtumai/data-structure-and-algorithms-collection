@@ -2,7 +2,7 @@
 Origin of sample test: Graph Search, Shortest Paths, and Data Structures course by Standford
 """
 
-from compute_strongly_connected_components import compute_scc
+from compute_strongly_connected_components import compute_sccs
 
 import resource
 import sys
@@ -32,8 +32,9 @@ def load_graph(path):
 class TestComputingSCC(unittest.TestCase):
     def test(self):
         graph = load_graph("sample_test_for_computing_SCC.txt")
-        res = compute_scc(graph)
-        self.assertEqual(sorted(res)[-5:], [211, 313, 459, 968, 434821])
+        sccs = compute_sccs(graph)
+        scc_lengths = list(map(lambda scc: len(scc), sccs))
+        self.assertEqual(sorted(scc_lengths)[-5:], [211, 313, 459, 968, 434821])
 
 
 if __name__ == "__main__":
