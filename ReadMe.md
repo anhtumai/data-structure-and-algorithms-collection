@@ -28,6 +28,7 @@ Data structure table:
 | [Topological Sort](graph/topological_sort.py) | ✔ | ✔ |
 | [Computing SCC](graph/compute_strongly_connected_components.py) | ✔ | ✔ |
 | [__Tree__](tree) | | |
+| [Knapsack problem (Decision Tree)](tree/zero_one_knapsack.py) | ✔ | ✔ | 
 | [Binary search tree](tree/bst.py) | ✔ | ✔ |
 | [Immutable bst](tree/ImmutableBinarySearchTree.py) | ✔ | ✔ |
 | [AVL tree](tree/avl.py) | ✔ | ✔ |
