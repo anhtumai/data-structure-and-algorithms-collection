@@ -26,7 +26,7 @@ with '1': we take the item, with '0': we leave it.
 '110' can represent [2,3] (with bitwise manipulation, the order is reversed,
 so it is [2,3] instead of [1,2]), '010' can represent [2].
 
-To get bit value (0 or 1) of number n at the index i (the last bit index is 0),
+To get bit value (0 or 1) of number n at the index i (the index of last bit is 0),
 we shift n by i to the right and get the remainder when dividing it by 2: `bit = (n >> i) % 2`
 """
 
