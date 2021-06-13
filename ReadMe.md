@@ -48,6 +48,8 @@ Algorithm table:
 | [Quick sort](divide_and_conquer/quick_sort.py) | ✔ | ✔ |
 | [Quick select](divide_and_conquer/quick_select.py) | ✔ | ✔ |
 | [Closest Points](divide_and_conquer/closest_points.py) | ✔ | ✔ |
+| [__Greedy__](greedy) | | |
+| [Knapsack problem (Greedy)](greedy/zero_one_knapsack.py) | ✔ | ✔ |
 
 ## Environment
 
