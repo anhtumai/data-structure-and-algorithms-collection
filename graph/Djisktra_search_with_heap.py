@@ -5,6 +5,9 @@ For example:
 graph = {"A": [("B", 12), ("C", 5)]} means there exists a path A -> B with length 12, A-> C with length 5.
 
 Return: a list, representing the path from stating to destination node
+
+Dependency: MinHeap class from heap.minmax_heap
+(I use my MinHeap implementation instead of built-in heapq lib because heapq doesn't support decrease_key method)
 """
 import math
 
@@ -86,9 +89,7 @@ def get_distances_and_parents(
             new_distance = ajd_distance + distances[s]
             if distances[adj_name] > new_distance:
                 distances[adj_name] = new_distance
-                min_heap.replace_with_condition(
-                    lambda node: node.name == adj_name, Node(adj_name, new_distance)
-                )
+                min_heap.decrease_key(adj_name, Node(adj_name, new_distance))
                 parents[adj_name] = s
     return (distances, parents)
 
