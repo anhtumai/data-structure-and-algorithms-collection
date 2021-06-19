@@ -9,7 +9,7 @@ Rules:
 - Every path from an node (including root) to any of Empty/Null nodes has the same number
 of black nodes.
 
-Pulic functions of RBTree:
+Public functions of RBTree:
 - insert(new_elem: any) -> None: insert new element to the tree
 - remove(elem: any) -> bool: remove existing element of the tree
                              return True if data was present and successfully removed

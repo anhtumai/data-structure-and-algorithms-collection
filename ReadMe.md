@@ -33,7 +33,7 @@ Data structure table:
 | [Immutable bst](tree/ImmutableBinarySearchTree.py) | ✔ | ✔ |
 | [AVL tree](tree/avl.py) | ✔ | ✔ |
 | [Immutable AVL tree](tree/ImmutableAVLTree.py) | ✔ | ✔ |
-| [Red Black tree](tree/red_black_tree.py)| ✔ | partial |
+| [Red Black tree](tree/red_black_tree.py)| ✔ | ✔ |
 | [__Heap__](heap) | | |
 | [Min/Max heap](heap/minmax_heap.py) | ✔ | ✔ |
 | [Median Heap](heap/median_heap.py) | ✔ | ✔ |
