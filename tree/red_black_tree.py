@@ -1,12 +1,36 @@
-from sty import fg, bg, ef, rs
-import sys
+"""
+Red Black tree: self-balancing binary tree where each node has an extra bit, that bit
+represents the colour, red or black
+
+Rules:
+- Every node has a colour either red or black
+- The root of the tree is always black
+- No 2 adjacent red nodes
+- Every path from an node (including root) to any of Empty/Null nodes has the same number
+of black nodes.
+
+Pulic functions of RBTree:
+- insert(new_elem: any) -> None: insert new element to the tree
+- remove(elem: any) -> bool: remove existing element of the tree
+                             return True if data was present and successfully removed
+                             otherwise return False
+- find_node_by_value(value: any) -> Union[Inode, None]: return the node with input value,
+                               if the value is not present, return None
+- get_inorder() -> list[any]: return inorder traversal of the tree
+- get_preorder() -> list[any]: return preorder traversal of the tree
+- get_postorder() -> list[any]: return postorder traversal of the tree
+"""
 
 
-class RBNode:
-    pass
+from typing import Union
+from sty import fg
 
 
-class Empty(RBNode):
+RBNode = Union["Empty", "Inode"]
+
+
+class Empty:
+    """Representing Null node"""
 
     def __init__(self, parent: "Inode"):
         self.parent = parent
@@ -28,9 +52,17 @@ class Empty(RBNode):
         return []
 
 
-class Inode(RBNode):
-    def __init__(self, value: any, is_red: bool, parent: RBNode,
-                 left: RBNode = None, right: RBNode = None):
+class Inode:
+    """Representing node with children and value"""
+
+    def __init__(
+        self,
+        value: any,
+        is_red: bool,
+        parent: RBNode,
+        left: RBNode = None,
+        right: RBNode = None,
+    ):
         self.value = value
         self.parent = parent
         # If left or right is None, assign Empty node
@@ -66,54 +98,6 @@ class RBTree:
     def __contains__(self, data: any) -> bool:
         return isinstance(self.find_node_by_value(data), Inode)
 
-    def insert(self, data: any) -> None:
-        if (isinstance(self.root, Empty)):
-            self.root = Inode(data, is_red=False, parent=None)
-        else:
-            self._recurs_insert(self.root, data)
-
-    def _recurs_insert(self, node: RBNode, data: any) -> None:
-        """
-        Assumption: root is Inode so parent of Empty node is always Inode
-        """
-
-        if (isinstance(node, Empty)):
-            parent, is_right = self._get_parent(node)
-            new_node = Inode(data, is_red=True, parent=parent)
-            if is_right:
-                parent.right = new_node
-            else:
-                parent.left = new_node
-            self._fix_insert(new_node)
-            return
-        if (data < node.value):
-            self._recurs_insert(node.left, data)
-        elif (data > node.value):
-            self._recurs_insert(node.right, data)
-
-    def _fix_insert(self, node: Inode) -> None:
-        """
-        Assumption: node cannot be root so node.parent is an Inode
-        """
-        parent, is_node_right_child = self._get_parent(node)
-        grandparent, is_parent_right_child = self._get_parent(parent)
-        if (grandparent is None  # when parent is root
-                or not (node.is_red and parent.is_red)):
-            return
-
-        uncle = grandparent.left if is_parent_right_child else grandparent.right
-
-        # Perform suitable rotation and recolor if uncle is black or Empty node
-        if (isinstance(uncle, Empty) or not uncle.is_red):
-            self.avl_rotate(node, parent, grandparent)
-        # Recolor and recheck if uncle is red
-        else:
-            parent.is_red = False
-            uncle.is_red = False
-            if (grandparent != self.root):
-                grandparent.is_red = True
-                self._fix_insert(grandparent)
-
     def _get_parent(self, node: RBNode) -> tuple[RBNode, bool]:
         if not node.parent:  # node is root
             return node.parent, False
@@ -127,17 +111,64 @@ class RBTree:
         else:
             return node.parent.right, True
 
+    def insert(self, data: any) -> None:
+        if isinstance(self.root, Empty):
+            self.root = Inode(data, is_red=False, parent=None)
+        else:
+            self._recurs_insert(self.root, data)
+
+    def _recurs_insert(self, node: RBNode, data: any) -> None:
+        """Assumption: root is Inode so parent of Empty node is always Inode"""
+
+        if isinstance(node, Empty):
+            parent, is_right = self._get_parent(node)
+            new_node = Inode(data, is_red=True, parent=parent)
+            if is_right:
+                parent.right = new_node
+            else:
+                parent.left = new_node
+            self._fix_insert(new_node)
+            return
+        if data < node.value:
+            self._recurs_insert(node.left, data)
+        elif data > node.value:
+            self._recurs_insert(node.right, data)
+
+    def _fix_insert(self, node: Inode) -> None:
+        """
+        Assumption: node cannot be root so node.parent is an Inode
+        """
+        parent, _ = self._get_parent(node)
+        grandparent, is_parent_right_child = self._get_parent(parent)
+        if grandparent is None or not (  # when parent is root
+            node.is_red and parent.is_red
+        ):
+            return
+
+        uncle = grandparent.left if is_parent_right_child else grandparent.right
+
+        # Perform suitable rotation and recolor if uncle is black or Empty node
+        if isinstance(uncle, Empty) or not uncle.is_red:
+            self.avl_rotate(node, parent, grandparent)
+        # Recolor and recheck if uncle is red
+        else:
+            parent.is_red = False
+            uncle.is_red = False
+            if grandparent != self.root:
+                grandparent.is_red = True
+                self._fix_insert(grandparent)
+
     def avl_rotate(self, node: Inode, parent: Inode, grandparent: Inode) -> None:
         # LR rotation
-        if (grandparent.value > parent.value and parent.value < node.value):
+        if grandparent.value > parent.value and parent.value < node.value:
             self.rr_rotate(parent)
             self.ll_rotate(grandparent, to_recolor=True)
         # RL rotation
-        elif (grandparent.value < parent.value and parent.value > node.value):
+        elif grandparent.value < parent.value and parent.value > node.value:
             self.ll_rotate(parent)
             self.rr_rotate(grandparent, to_recolor=True)
         # LL rotation
-        elif (grandparent.value > parent.value and parent.value > node.value):
+        elif grandparent.value > parent.value and parent.value > node.value:
             self.ll_rotate(grandparent, to_recolor=True)
         # RR rotation
         else:
@@ -227,12 +258,13 @@ class RBTree:
 
     def find_node_by_value(self, data: any) -> RBNode:
         """
-            Return:
-                Empty if data is not found in the tree
-                or Inode containing data
+        Return:
+            Empty if data is not found in the tree
+            or Inode containing data
         """
+
         def _find_node_by_value(node: RBNode) -> RBNode:
-            if (isinstance(node, Empty)):
+            if isinstance(node, Empty):
                 return node
             if node.value == data:
                 return node
@@ -240,37 +272,39 @@ class RBTree:
                 return _find_node_by_value(node.right)
             else:
                 return _find_node_by_value(node.left)
+
         return _find_node_by_value(self.root)
 
     def _get_node_with_smallest_value(self, node: Inode) -> Inode:
-        if (isinstance(node.left, Empty)):
+        if isinstance(node.left, Empty):
             return node
         else:
             return self._get_node_with_smallest_value(node.left)
 
     def remove(self, data: any) -> bool:
         """
-            Return:
-                False if data has already existed
-                True if data is successfully inserted
+        Return:
+            False if data has already existed
+            True if data is successfully inserted
         """
         deleted_node = self.find_node_by_value(data)
-        if (isinstance(deleted_node, Empty)):
+        if isinstance(deleted_node, Empty):
             return False
-        if (isinstance(deleted_node.left, Inode) and
-                isinstance(deleted_node.right, Inode)):
-            successor = self._get_node_with_smallest_value(
-                deleted_node.right)
+        if isinstance(deleted_node.left, Inode) and isinstance(
+            deleted_node.right, Inode
+        ):
+            successor = self._get_node_with_smallest_value(deleted_node.right)
+            # swap value of deleted_node with its smallest right successor
             deleted_node.value = successor.value
-            deleted_node = successor
+            self._remove_node_without_2_children(successor)
+        else:
+            self._remove_node_without_2_children(deleted_node)
 
-        # remove node with 0 or 1 children
-        self._remove_node_without_2_children(deleted_node)
         return True
 
     def _remove_leaf(self, leaf: Inode) -> None:
         """Leaf is an Inode without any children"""
-        if (isinstance(leaf.left, Inode) or isinstance(leaf.right, Inode)):
+        if isinstance(leaf.left, Inode) or isinstance(leaf.right, Inode):
             raise RuntimeError("Leaf has child, wtf is this")
         # if leaf is root
         if leaf == self.root:
@@ -284,8 +318,7 @@ class RBTree:
         """
         Assumption: node has 0 or 1 child.
         """
-        not_nil_child = node.right if isinstance(
-            node.left, Empty) else node.left
+        not_nil_child = node.right if isinstance(node.left, Empty) else node.left
         if node == self.root:
             self.root = not_nil_child
             self.root.parent = None
@@ -298,7 +331,7 @@ class RBTree:
             self._remove_leaf(node)
         else:
             # Black node has only 1 child, and that child must be red
-            if (not_nil_child.is_red):
+            if not_nil_child.is_red:
                 node.value = not_nil_child.value
                 node.left = not_nil_child.left
                 node.right = not_nil_child.right
@@ -331,32 +364,17 @@ class RBTree:
         parent, _ = self._get_parent(node)
         closer_child = sibling.left if is_sibling_right else sibling.right
         outer_child = sibling.right if is_sibling_right else sibling.left
-        if (
-            sibling.is_black() and
-            sibling.left.is_red and
-            sibling.right.is_red
-        ):
+        if sibling.is_black() and sibling.left.is_red and sibling.right.is_red:
             self.__case_2(parent, sibling, is_sibling_right)
         elif (
-            sibling.is_black() and
-            sibling.left.is_black() and
-            sibling.right.is_black()
+            sibling.is_black() and sibling.left.is_black() and sibling.right.is_black()
         ):
-            self.__case_3(parent, sibling, is_sibling_right)
-        elif (sibling.is_red):
+            self.__case_3(parent, sibling)
+        elif sibling.is_red:
             self.__case_4(parent, sibling, node, is_sibling_right)
-        elif (
-            sibling.is_black() and
-            closer_child.is_red and
-            outer_child.is_black()
-        ):
-            self.__case_5(sibling, node, closer_child,
-                          outer_child, is_sibling_right)
-        elif (
-            sibling.is_black() and
-            closer_child.is_black() and
-            outer_child.is_red
-        ):
+        elif sibling.is_black() and closer_child.is_red and outer_child.is_black():
+            self.__case_5(sibling, node, closer_child, is_sibling_right)
+        elif sibling.is_black() and closer_child.is_black() and outer_child.is_red:
             self.__case_6(parent, sibling, is_sibling_right)
 
     def __case_2(self, parent: Inode, sibling: Inode, is_sibling_right: bool):
@@ -378,7 +396,7 @@ class RBTree:
             sibling.left.is_red = False
             self.ll_rotate(parent)
 
-    def __case_3(self, parent: Inode, sibling: Inode, is_sibling_right: bool) -> None:
+    def __case_3(self, parent: Inode, sibling: Inode) -> None:
         """
         Case 3 applies when
             sibling is Black
@@ -399,7 +417,9 @@ class RBTree:
             sibling.is_red = True
             self._fix_double_black_remove(parent)
 
-    def __case_4(self, parent: Inode, sibling: Inode, node: RBNode, is_sibling_right: bool) -> None:
+    def __case_4(
+        self, parent: Inode, sibling: Inode, node: RBNode, is_sibling_right: bool
+    ) -> None:
         """
         Case 4 applies when
             sibling is Red
@@ -419,9 +439,13 @@ class RBTree:
             self.ll_rotate(parent)
         self._fix_double_black_remove(node)
 
-    def __case_5(self, sibling: Inode, node: RBNode,
-                 closer_child: RBNode, outer_child: RBNode,
-                 is_sibling_right: bool) -> None:
+    def __case_5(
+        self,
+        sibling: Inode,
+        node: RBNode,
+        closer_child: RBNode,
+        is_sibling_right: bool,
+    ) -> None:
         """
         Case 5 applies when
             sibling is Black
@@ -431,7 +455,7 @@ class RBTree:
                 /     \     --CASE 5 ROTATE-->           /     \
               |5B|    30B     Rotate sibling           |5B|    25B
               /  \    /  \    opposite double black    /  \    /  \
-             N   7B 25R  40B                          N   7B  20B 30R
+             2B   7B 25R  40B                         2B  7B  20B 30R
                     /  \                                          /  \
                    20B 28B                                       28B 40B
         After this apply case 6
@@ -466,10 +490,13 @@ class RBTree:
         sibling.right.is_red = False
 
     def get_inorder(self) -> list[any]:
+        """Inorder traversal"""
         return self.root.inorder()
 
     def get_preorder(self) -> list[any]:
+        """Preorder traversal"""
         return self.root.preorder()
 
     def get_postorder(self) -> list[any]:
+        """Postorder traversal"""
         return self.root.postorder()
