@@ -19,6 +19,10 @@ Pulic functions of RBTree:
 - get_inorder() -> list[any]: return inorder traversal of the tree
 - get_preorder() -> list[any]: return preorder traversal of the tree
 - get_postorder() -> list[any]: return postorder traversal of the tree
+
+Unit Test: unittest_rb_tree.py
+Insertion and Deletion implementations are based on Jenny's lectures:
+https://www.youtube.com/watch?v=w5cvkTXY0vQ&t=3232s
 """
 
 
