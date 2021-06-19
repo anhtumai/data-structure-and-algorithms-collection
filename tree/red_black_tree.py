@@ -14,8 +14,8 @@ Pulic functions of RBTree:
 - remove(elem: any) -> bool: remove existing element of the tree
                              return True if data was present and successfully removed
                              otherwise return False
-- find_node_by_value(value: any) -> Union[Inode, None]: return the node with input value,
-                               if the value is not present, return None
+- find_node_by_value(value: any) -> RBNode: return the node with input value,
+                               if the value is not present, return Empty
 - get_inorder() -> list[any]: return inorder traversal of the tree
 - get_preorder() -> list[any]: return preorder traversal of the tree
 - get_postorder() -> list[any]: return postorder traversal of the tree
