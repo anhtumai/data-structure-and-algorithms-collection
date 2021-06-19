@@ -478,7 +478,7 @@ class RBTree:
             closer sibling child is Black or Empty
             outer sibling child is Red
                   10B                                      25B
-                /     \     --CASE 5 ROTATE-->           /     \
+                /     \     --CASE 6 ROTATE-->           /     \
               |5B|    25B     Rotate parent            10B     30B
               /  \    /  \    to double black          /  \    /  \
              N   7B 20B  30R                          5B  20B 28B 40B
