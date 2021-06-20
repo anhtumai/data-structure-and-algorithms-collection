@@ -5,19 +5,19 @@ This algorithm is based on a fact: the global minimum-weight edge must be
 the element of minimum spanning tree.
 
 Kruskal algorithm:
-- 
-- for v in Vi, Make-Set(v) # every vertex lives in its single set
-- sort E by weight
-- for edge in all edges:
-    - if Find-Set(u) != Find-Set(v):
-        - add this edge into our tree
-        - Union(u, v)
+- Initialize a disjoint set with all nodes from graph
+- Sort all edges by weight
+- for edge in sorted edges:
+    - if Find-Set(edge.u) != Find-Set(edge.v):
+        - add this edge into minimum spanning tree
+        - Union-Sets(edge.u, edge.v)
 """
-
-from disjoint_set import DisjointSet
 
 from dataclasses import dataclass
 from typing import Union
+
+from disjoint_set import DisjointSet
+
 
 Vertex = Union[str, int]
 Graph = dict[Vertex, list[tuple[Vertex]]]
@@ -25,6 +25,7 @@ Graph = dict[Vertex, list[tuple[Vertex]]]
 
 @dataclass(frozen=True)
 class Edge:
+    """Representing edge in graph"""
     u: Vertex
     v: Vertex
     weight: int
@@ -58,6 +59,7 @@ def get_all_edges(graph: Graph) -> list[Edge]:
 
 
 def kruskal_minimum_spanning_tree(graph: Graph) -> list[Edge]:
+    """Return list of edges, representing minimum spanning tree"""
     vertices = get_all_nodes(graph)
     edges = get_all_edges(graph)
 
