@@ -1,5 +1,8 @@
 # data-structure-and-algorithms-collection
 
+In the word of Richard Feynman
+> What I cannot create, I do not understand
+
 📚 Python Implementations by `@anhtumai`
 [Linkedin](https://www.linkedin.com/in/tu-mai-1bb32715b/)
 
