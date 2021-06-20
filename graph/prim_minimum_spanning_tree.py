@@ -1,6 +1,6 @@
 """
 Minimum Spanning Tree of graph G: subset of edges of G that farm a tree
-and hit all vertices of G (without forming a cycle) 
+and hit all vertices of G (without forming a cycle). 
 
 Prim's algorithm
 - initially a min heap storing all nodes in graph G 
@@ -35,7 +35,11 @@ DistanceDict = dict[NodeName, int]
 ParentDict = dict[NodeName, NodeName]
 
 
-class Node(object):
+class Node:
+    """
+    Representing a vertex in a graph with its minimum distance from subset S.
+    """
+
     def __init__(self, name: str, distance: int):
         self.name = name
         self.distance = distance
