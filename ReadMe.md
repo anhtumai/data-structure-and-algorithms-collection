@@ -7,7 +7,9 @@
 
 ## Introduction
 
-My implementations (and documentations) of basic data structures and problem solving techniques from scratch for study purpose. It is inspired by `@quynhhgoogoo` 's [repo](https://github.com/quynhhgoogoo/intro-to-data-structure-and-algorithm) and `@keon` 's [repo](https://github.com/keon/algorithms).
+My implementations (and documentations) of basic data structures and problem
+solving techniques from scratch for study purpose.
+It is inspired by `@quynhhgoogoo` 's [repo](https://github.com/quynhhgoogoo/intro-to-data-structure-and-algorithm) and `@keon` 's [repo](https://github.com/keon/algorithms).
 
 ## Progress
 
@@ -27,8 +29,10 @@ Data structure table:
 | [Djisktra shortest path algorithm](graph/Djisktra_search_with_heap.py) | ✔ | ✔ |
 | [Topological Sort](graph/topological_sort.py) | ✔ | ✔ |
 | [Computing SCC](graph/compute_strongly_connected_components.py) | ✔ | ✔ |
+| [Prim Minimum Spanning Tree](graph/prim_minimum_spanning_tree.py) | ✔ | |
+| [Kruskal Minimum Spanning Tree](graph/kruskal_minimum_spanning_tree.py) | ✔ | |
 | [__Tree__](tree) | | |
-| [Knapsack problem (Decision Tree)](tree/zero_one_knapsack.py) | ✔ | ✔ | 
+| [0/1 Knapsack problem (Decision Tree)](tree/zero_one_knapsack.py) | ✔ | ✔ |
 | [Binary search tree](tree/bst.py) | ✔ | ✔ |
 | [Immutable bst](tree/ImmutableBinarySearchTree.py) | ✔ | ✔ |
 | [AVL tree](tree/avl.py) | ✔ | ✔ |
@@ -49,7 +53,9 @@ Algorithm table:
 | [Quick select](divide_and_conquer/quick_select.py) | ✔ | ✔ |
 | [Closest Points](divide_and_conquer/closest_points.py) | ✔ | ✔ |
 | [__Greedy__](greedy) | | |
-| [Knapsack problem (Greedy)](greedy/zero_one_knapsack.py) | ✔ | ✔ |
+| [Fractional Knapsack problem (Greedy)](greedy/fractional_knapsack.py) | ✔ | ✔ |
+| [Prim Minimum Spanning Tree](graph/prim_minimum_spanning_tree.py) | ✔ | |
+| [Kruskal Minimum Spanning Tree](graph/kruskal_minimum_spanning_tree.py) | ✔ | |
 
 ## Environment
 
