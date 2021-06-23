@@ -22,6 +22,9 @@ For Min Heap only:
                  since we need to update the weight of a path when we find the shorter path.
                  This function assumes that Node datatype has 'name' property)
 """
+from typing import Union
+
+
 class Heap:
     def __init__(self, elems: list[any] = []):
         self.elems: list[any] = []
@@ -72,13 +75,13 @@ class Heap:
 
     def peek(self) -> any:
         """Return the root element of the heap"""
-        if (len(self.elems) == 0):
+        if len(self.elems) == 0:
             raise RuntimeError("Heap is empty")
         return self.elems[0]
 
     def poll(self) -> any:
         """Return and remove the current root element in the min heap"""
-        if (len(self.elems) == 0):
+        if len(self.elems) == 0:
             raise RuntimeError("Heap is empty")
         res = self.elems[0]
         self.elems[0] = self.elems[-1]
@@ -98,60 +101,82 @@ class Heap:
 class MinHeap(Heap):
     def _heapify_up(self, start: int) -> None:
         index = start
-        while (self._has_parent(index) and self._get_value(self._get_parent_index(index)) > self.elems[index]):
+        while (
+            self._has_parent(index)
+            and self._get_value(self._get_parent_index(index)) > self.elems[index]
+        ):
             parent_index = self._get_parent_index(index)
-            self.elems[parent_index], self.elems[index] = self.elems[index], self.elems[parent_index]
+            self.elems[parent_index], self.elems[index] = (
+                self.elems[index],
+                self.elems[parent_index],
+            )
             index = self._get_parent_index(index)
 
     def _heapify_down(self, start: int = 0) -> None:
         index = start
-        while (self._has_left(index)):
+        while self._has_left(index):
             smaller_child_index = self._get_left_index(index)
-            if (self._has_right(index) and self._get_right(index) < self._get_left(index)):
+            if self._has_right(index) and self._get_right(index) < self._get_left(
+                index
+            ):
                 smaller_child_index = self._get_right_index(index)
 
-            if (self.elems[index] < self.elems[smaller_child_index]):
+            if self.elems[index] < self.elems[smaller_child_index]:
                 return
-            self.elems[index], self.elems[smaller_child_index] = \
-                self.elems[smaller_child_index], self.elems[index]
+            self.elems[index], self.elems[smaller_child_index] = (
+                self.elems[smaller_child_index],
+                self.elems[index],
+            )
             index = smaller_child_index
 
-    def decrease_key(self, name: any, new_node: "Node") -> None:
+    def decrease_key(self, name: any, new_distance: Union[int, float]) -> None:
         """Find the node with the given name, replace it
-           with the new node with lesser value.
-           
-           Args:
-                name: name of replaced node
-                new_node: new node which is lesser than the current node
-           Assumptions:
-                Elements in heap tree must have name property
+        with the new node with lesser value.
+
+        Args:
+             name: name of replaced node
+             new_node: new node which is lesser than the current node
+        Assumptions:
+             Elements in heap tree must have name and distance property
 
         """
         for i in range(len(self.elems)):
-            if (self.elems[i].name == name):
-                assert (new_node < self.elems[i]), "new node should be lesser than current node"
-                self.elems[i] = new_node
+            if self.elems[i].name == name:
+                assert (
+                    new_distance < self.elems[i].distance
+                ), "new distance should be lesser than current distance"
+                self.elems[i].distance = new_distance
                 self._heapify_up(i)
                 return
+
 
 class MaxHeap(Heap):
     def _heapify_up(self, start: int) -> None:
         index = start
-        while (self._has_parent(index) and self._get_value(self._get_parent_index(index)) < self.elems[index]):
+        while (
+            self._has_parent(index)
+            and self._get_value(self._get_parent_index(index)) < self.elems[index]
+        ):
             parent_index = self._get_parent_index(index)
-            self.elems[parent_index], self.elems[index] = self.elems[index], self.elems[parent_index]
+            self.elems[parent_index], self.elems[index] = (
+                self.elems[index],
+                self.elems[parent_index],
+            )
             index = self._get_parent_index(index)
 
     def _heapify_down(self, start: int = 0) -> None:
         index = start
-        while (self._has_left(index)):
+        while self._has_left(index):
             bigger_child_index = self._get_left_index(index)
-            if (self._has_right(index) and self._get_right(index) > self._get_left(index)):
+            if self._has_right(index) and self._get_right(index) > self._get_left(
+                index
+            ):
                 bigger_child_index = self._get_right_index(index)
 
-            if (self.elems[index] > self.elems[bigger_child_index]):
+            if self.elems[index] > self.elems[bigger_child_index]:
                 return
-            self.elems[index], self.elems[bigger_child_index] = \
-                self.elems[bigger_child_index], self.elems[index]
+            self.elems[index], self.elems[bigger_child_index] = (
+                self.elems[bigger_child_index],
+                self.elems[index],
+            )
             index = bigger_child_index
-

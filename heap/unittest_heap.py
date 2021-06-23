@@ -19,7 +19,7 @@ class TestHeap(unittest.TestCase):
         xs = [10, 3, 5, 2, 19, 13, 1]
         min_heap = MinHeap(xs)
         sorted_xs = sorted(xs)
-        for x in sorted_xs: 
+        for x in sorted_xs:
             self.assertEqual(x, min_heap.poll())
 
     def test_max_heap(self):
