@@ -2,7 +2,7 @@
 Problem:
 Given an array L with n elements. Inversion occurs when L[i] > L[j] when 0 < i < j < n.
 Example:
-count_inversions([1,3,5,2,4,6]) ->
+count_inversions([1,3,5,2,4,6]) -> 3
 Explanation: 3 pairs of inversions (3,2), (5,3), (5,4)
 """
 
