@@ -12,8 +12,9 @@ Example: dfs({ "A" : ["B", "C"], "B": ["D"] }, "A", "D") -> ["A", "B", "D"]
 
 """
 
+from typing import Union
 
-Node = any
+Node = Union[str, int]
 Graph = dict[Node, list[Node]]
 ParentDict = dict[Node, Node]
 
@@ -50,7 +51,7 @@ def get_path(parents: ParentDict, start: Node, end: Node) -> list[Node]:
     return path
 
 
-def dfs(graph: dict[str, list[str]], start: str, end: str):
+def dfs(graph: dict[str, list[str]], start: str, end: str) -> list[Node]:
     """Return a list of nodes from start to end node given a graph"""
     parents = get_parents(graph, start)
     if end in parents:
@@ -60,12 +61,7 @@ def dfs(graph: dict[str, list[str]], start: str, end: str):
 
 
 if __name__ == "__main__":
-    sample_graph = {
-        "A": ["B", "C"],
-        "B": ["D", "E"],
-        "C": ["B", "F"],
-        "E": ["F"]
-    }
+    sample_graph = {"A": ["B", "C"], "B": ["D", "E"], "C": ["B", "F"], "E": ["F"]}
 
     shortest_path: list[Node] = dfs(sample_graph, "A", "F")
     print(shortest_path)  # ['A', 'B', 'E', 'F']

@@ -23,9 +23,9 @@ Tested with: https://www.hackerearth.com/practice/algorithms/graphs/strongly-con
 
 """
 
-from typing import Generator
+from typing import Generator, Union
 
-Node = any
+Node = Union[str, int]
 Graph = dict[Node, list[Node]]
 Stack = list[Node]
 

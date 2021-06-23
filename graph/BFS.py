@@ -13,8 +13,9 @@ Example: bfs({ "A" : ["B", "C"], "B": ["D"] }, "A", "D") -> ["A", "B", "D"]
 """
 
 from queue import Queue
+from typing import Union
 
-Node = any
+Node = Union[str, int]
 Graph = dict[Node, list[Node]]
 ParentDict = dict[Node, Node]
 

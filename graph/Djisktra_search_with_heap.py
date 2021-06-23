@@ -6,13 +6,19 @@ graph = {"A": [("B", 12), ("C", 5)]} means there exists a path A -> B with lengt
 
 Return: a list, representing the path from stating to destination node
 
-Dependency: MinHeap class from heap.minmax_heap
+Some notes:
+
+- Dependency: MinHeap class from heap.minmax_heap
 (I use my MinHeap implementation instead of built-in heapq lib because heapq doesn't support decrease_key method)
+
+- Type naming:
+    - Vertex: name of a node in a graph, can be a string or an integer
+    - Node: a class with 2 property, name (which is a Vertex) and distance from starting vertex
 """
 import math
-
 import os
 import sys
+from typing import Union
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
@@ -20,13 +26,16 @@ sys.path.append(parentdir)
 
 from heap.minmax_heap import MinHeap
 
-Graph = dict[any, list[tuple[any, int]]]
-Distancedict = dict[any, int]
-Parentdict = dict[any, any]
+Vertex = Union[str, int]
+Graph = dict[Vertex, list[tuple[Vertex, int]]]
+Distancedict = dict[Vertex, int]
+Parentdict = dict[Vertex, Vertex]
 
 
-class Node(object):
-    def __init__(self, name: str, distance: int):
+class Node:
+    """A class with 2 properties, name of Vertex and its minimum distance from starting node"""
+
+    def __init__(self, name: Vertex, distance: int):
         self.name = name
         self.distance = distance
 
@@ -37,14 +46,14 @@ class Node(object):
         return self.distance < other.distance
 
 
-def initialize(graph: Graph, start: any) -> tuple[Distancedict, Parentdict, MinHeap]:
+def initialize(graph: Graph, start: Vertex) -> tuple[Distancedict, Parentdict, MinHeap]:
     """Initialize variables before performing Djisktra algorithms
     Input:
         graph: adjacent list representation of a graph
         start: name of starting point
     Returns:
-        distances: a key-value pair of name of node and its minimum distance from start
-        parents: a key-value pair of name of a node and its parent
+        distances: a key-value pair of name of vertex and its minimum distance from start
+        parents: a key-value pair of name of a vertex and its parent
         min_heap: a MinHeap to get node with minimum distance in O(log(n)) time.
     """
     node_names = set()
@@ -68,15 +77,16 @@ def initialize(graph: Graph, start: any) -> tuple[Distancedict, Parentdict, MinH
 
 
 def get_distances_and_parents(
-    graph: Graph, start: any
+    graph: Graph, start: Vertex
 ) -> tuple[Distancedict, Parentdict]:
-    """Find the shorted path from starting point to other nodes in the graph, return their minimum distances and parents
+    """Find the shortest path from starting point to other vertices in the graph,
+    return their minimum distances and parents
     Input:
         graph: adjacent list representation of a graph
         start: name of starting point
     Returns:
-        distances: a key-value pair of name of node and its minimum distance from start
-        parents: a key-value pair of name of a node and its parent
+        distances: a key-value pair of name of vertex and its minimum distance from start
+        parents: a key-value pair of name of a vertex and its parent
     """
     # Initialize
     distances, parents, min_heap = initialize(graph, start)
@@ -84,19 +94,20 @@ def get_distances_and_parents(
     # Compute
     while not min_heap.is_empty():
         node = min_heap.poll()
-        s = node.name
-        for (adj_name, ajd_distance) in graph[s]:
-            new_distance = ajd_distance + distances[s]
+        vertex = node.name
+        for (adj_name, ajd_distance) in graph[vertex]:
+            new_distance = ajd_distance + distances[vertex]
             if distances[adj_name] > new_distance:
                 distances[adj_name] = new_distance
-                min_heap.decrease_key(adj_name, Node(adj_name, new_distance))
-                parents[adj_name] = s
+                min_heap.decrease_key(adj_name, new_distance)
+                parents[adj_name] = vertex
     return (distances, parents)
 
 
-def get_path(parents: Parentdict, start: any, end: any) -> list[any]:
-    """Return a list of nodes from start node to end node given a key-pair value of node and its parent"""
-    path: list[any] = [end]
+def get_path(parents: Parentdict, start: Vertex, end: Vertex) -> list[Vertex]:
+    """Return a list of nodes from start vertex to end vertex
+    given a key-pair value of vertex and its parent"""
+    path: list[Vertex] = [end]
     while end != start:
         path.append(parents[end])
         end = parents[end]
@@ -104,7 +115,7 @@ def get_path(parents: Parentdict, start: any, end: any) -> list[any]:
     return path
 
 
-def djisktra(graph: Graph, start: any, end: any) -> list[any]:
+def djisktra(graph: Graph, start: Vertex, end: Vertex) -> list[Vertex]:
     """Return shortest path from start to end"""
     _, parents = get_distances_and_parents(graph, start)
     return get_path(parents, start, end)
@@ -120,5 +131,5 @@ if __name__ == "__main__":
         "D": [("B", 5), ("E", 7)],
         "E": [("D", 7), ("B", 1)],
     }
-    path = djisktra(sample_graph, "A", "E")
-    print(path)  # ['A', 'B', 'E']
+    shortest_path = djisktra(sample_graph, "A", "E")
+    print(shortest_path)  # ['A', 'B', 'E']

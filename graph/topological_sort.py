@@ -19,7 +19,9 @@ where some events must occur before others. For exp:
 - Event scheduling
 """
 
-Node = any
+from typing import Union
+
+Node = Union[str, int]
 Graph = dict[Node, list[Node]]
 
 
