@@ -1,3 +1,7 @@
+"""
+Origin of sample test: Graph Search, Shortest Paths, and Data Structures course by Standford
+"""
+
 import unittest
 from median_heap import MedianHeap, get_median
 
@@ -24,6 +28,15 @@ class TestMedianHeap(unittest.TestCase):
         for i in range(len(xs)):
             heap.add(xs[i])
             self.assertEqual(heap.peek(), get_median(xs[: (i + 1)]))
+
+    def test_with_file(self):
+        median_heap = MedianHeap([])
+        res = 0
+        with open("Median.txt", "r") as f:
+            for line in f:
+                median_heap.add(int(line))
+                res += median_heap.peek()
+        self.assertEqual(res, 46831213)
 
 
 if __name__ == "__main__":
