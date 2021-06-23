@@ -25,7 +25,6 @@ Data structure table:
 | [Doubly linked list](linkedlist/doubly_linked_list.py) | ✔ | ✔|
 | [Circular linked list](linkedlist/circular_linked_list.py) | ✔ | ✔|
 | [Floyd cycle detection](linkedlist/floyd_cycle_detection.py) | ✔ | ✔|
-| Circularly linked list | | |
 | [__Graph__](graph) | | |
 | [Breadth first search](graph/BFS.py) | ✔ | ✔ |
 | [Depth first search](graph/DFS.py) | ✔ | ✔ |
@@ -55,6 +54,7 @@ Algorithm table:
 | [Quick sort](divide_and_conquer/quick_sort.py) | ✔ | ✔ |
 | [Quick select](divide_and_conquer/quick_select.py) | ✔ | ✔ |
 | [Closest Points](divide_and_conquer/closest_points.py) | ✔ | ✔ |
+| [Counting inversions](divide_and_conquer/counting_inversion.py) | ✔ | ✔ |
 | [__Greedy__](greedy) | | |
 | [Fractional Knapsack problem (Greedy)](greedy/fractional_knapsack.py) | ✔ | ✔ |
 | [Prim Minimum Spanning Tree](graph/prim_minimum_spanning_tree.py) | ✔ | |
