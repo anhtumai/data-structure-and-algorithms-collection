@@ -16,7 +16,7 @@ Heap Public method:
 
 For Min Heap only:
 - decrease_key(name: any, new_distance: Union[int | float]) -> None: 
-                 Find the node with the given name, update it distance to
+                 Find the node with the given name, update its distance to
                  lesser value (new_distance)
                  ( This function is created specifically for graph finding algorithms,
                  since we need to update the weight of a path when we find the shorter path.
