@@ -26,15 +26,13 @@ Graph = dict[Node, list[Node]]
 
 
 def topsort(graph: Graph) -> list[Node]:
-    """Return a topological ordering from a directed acyclic graph
-    """
+    """Return a topological ordering from a directed acyclic graph"""
 
     explored: set[Node] = set()
     stack = []
 
     def topsort_util(new_node: Node) -> None:
-        """Update the stack while traversing the graph in depth
-        """
+        """Update the stack while traversing the graph in depth"""
 
         if new_node in explored:
             return
@@ -53,12 +51,7 @@ def topsort(graph: Graph) -> list[Node]:
 
 
 if __name__ == "__main__":
-    sample_graph_1 = {
-        "A": ["B", "C"],
-        "B": ["D"],
-        "C": ["D"],
-        "D": ["E"]
-    }
+    sample_graph_1 = {"A": ["B", "C"], "B": ["D"], "C": ["D"], "D": ["E"]}
 
     order_1 = topsort(sample_graph_1)
     print(order_1)  # ['A', 'C', 'B', 'D', 'E']
@@ -74,7 +67,7 @@ if __name__ == "__main__":
         9: [2, 10],
         10: [6],
         11: [12],
-        12: [8]
+        12: [8],
     }
 
     order_2 = topsort(sample_graph_2)

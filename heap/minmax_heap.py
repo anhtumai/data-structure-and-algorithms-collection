@@ -15,12 +15,12 @@ Heap Public method:
 - add() -> None: add new element to the heap
 
 For Min Heap only:
-- decrease_key(name: any, new_node: Node) -> None: 
-                 Find the node with the given name, replace it
-                 with the new node with lesser value.
+- decrease_key(name: any, new_distance: Union[int | float]) -> None: 
+                 Find the node with the given name, update it distance to
+                 lesser value (new_distance)
                  ( This function is created specifically for graph finding algorithms,
                  since we need to update the weight of a path when we find the shorter path.
-                 This function assumes that Node datatype has 'name' property)
+                 This function assumes that Node datatype has 'name' and 'distance' property)
 """
 from typing import Union
 
@@ -130,12 +130,11 @@ class MinHeap(Heap):
             index = smaller_child_index
 
     def decrease_key(self, name: any, new_distance: Union[int, float]) -> None:
-        """Find the node with the given name, replace it
-        with the new node with lesser value.
+        """Find the node with the given name, decrease its distance to new_distance.
 
         Args:
              name: name of replaced node
-             new_node: new node which is lesser than the current node
+             new_distance: new distance of updated node
         Assumptions:
              Elements in heap tree must have name and distance property
 

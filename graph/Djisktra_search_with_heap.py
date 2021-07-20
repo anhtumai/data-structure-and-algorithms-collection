@@ -52,8 +52,8 @@ def initialize(graph: Graph, start: Vertex) -> tuple[Distancedict, Parentdict, M
         graph: adjacent list representation of a graph
         start: name of starting point
     Returns:
-        distances: a key-value pair of name of vertex and its minimum distance from start
-        parents: a key-value pair of name of a vertex and its parent
+        distances: key-value pairs of all vertices and their minimum distances from start
+        parents: key-value pairs of all vertices and their parents
         min_heap: a MinHeap to get node with minimum distance in O(log(n)) time.
     """
     node_names = set()
@@ -85,8 +85,8 @@ def get_distances_and_parents(
         graph: adjacent list representation of a graph
         start: name of starting point
     Returns:
-        distances: a key-value pair of name of vertex and its minimum distance from start
-        parents: a key-value pair of name of a vertex and its parent
+        distances: key-value pairs of all vertices and their minimum distances from start
+        parents: key-value pairs of all vertices and their parents
     """
     # Initialize
     distances, parents, min_heap = initialize(graph, start)
@@ -106,7 +106,7 @@ def get_distances_and_parents(
 
 def get_path(parents: Parentdict, start: Vertex, end: Vertex) -> list[Vertex]:
     """Return a list of nodes from start vertex to end vertex
-    given a key-pair value of vertex and its parent"""
+    given key-value pairs of vertices and their parents"""
     path: list[Vertex] = [end]
     while end != start:
         path.append(parents[end])
